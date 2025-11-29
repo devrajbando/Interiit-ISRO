@@ -2,15 +2,12 @@ import ChatLeft from "../Components/Chatleft";
 import Chatmiddle from "../Components/Chatmiddle";
 import Chatright from "../Components/Chatright";
 
-function Chat() {
-    console.log("in the chat")
+export default function Chat() {
   return (
-    <div flex className="flex h-screen w-screen">
+    <div className="flex h-full w-full bg-white dark:bg-[#0d0d0f] transition-colors duration-300">
       <ChatLeft />
       <Chatmiddle />
       <Chatright />
     </div>
   );
 }
-
-export default Chat;
