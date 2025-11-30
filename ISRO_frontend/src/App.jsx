@@ -9,7 +9,7 @@ export default function App() {
     <div className="w-screen h-screen bg-white dark:bg-[#0d0d0f] transition-colors duration-300 overflow-hidden">
       <Navbar />
       
-      <div className="h-screen overflow-hidden">
+      <div className="pt-16 h-screen overflow-hidden">
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Home />} />
