@@ -1,7 +1,7 @@
 // App.jsx
 import Navbar from "./Components/Navbar";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Home from "./pages/Home.jsx";
+import Home from "./Pages/Home.jsx";
 import Chat from "./Pages/Chat.jsx";
 
 export default function App() {
