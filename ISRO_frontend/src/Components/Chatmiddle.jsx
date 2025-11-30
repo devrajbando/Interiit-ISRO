@@ -99,12 +99,6 @@ export default function Chatmiddle() {
     fileRef.current = null;
   };
 
-  const removeImage = () => {
-    if (finalImage) URL.revokeObjectURL(finalImage);
-    setFinalImage(null);
-    fileRef.current = null;
-  };
-
   const dragOver = (e) => {
     e.preventDefault();
     setDragActive(true);
@@ -152,13 +146,6 @@ export default function Chatmiddle() {
               alt="Uploaded"
               className="max-w-full max-h-full object-contain rounded-lg shadow-2xl"
             />
-
-            <button
-              onClick={removeImage}
-              className="absolute top-5 right-5 px-3 py-1 bg-red-600 text-white rounded-md"
-            >
-              Remove
-            </button>
           </div>
         </>
       ) : (
