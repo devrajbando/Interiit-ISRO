@@ -131,7 +131,7 @@ const Dashboard = () => {
             onClick={() => navigate("/chat")}
             className="group relative flex items-center gap-2 px-6 py-4 font-semibold rounded-xl bg-orange-500 text-white shadow-lg hover:bg-orange-600 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 active:shadow-md transition-all duration-200 overflow-hidden"
           >
-            <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+            <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-linear-to-r from-transparent via-white/20 to-transparent" />
 
             <Plus className="w-5 h-5 relative z-10" />
             <span className="relative z-10">New Analysis</span>
@@ -191,8 +191,8 @@ const Dashboard = () => {
                 <div
                   className={`p-3 rounded-xl shadow-inner ${
                     darkMode
-                      ? "bg-gradient-to-br from-orange-600/20 to-blue-600/20"
-                      : "bg-gradient-to-br from-orange-100 to-blue-100"
+                      ? "bg-linear-to-br from-orange-600/20 to-blue-600/20"
+                      : "bg-linear-to-br from-orange-100 to-blue-100"
                   }`}
                 >
                   <Satellite
@@ -301,8 +301,8 @@ const Dashboard = () => {
               onClick={() => navigate("/chat")}
               className={`px-8 py-4 text-lg font-semibold rounded-xl transition-all shadow-xl ${
                 darkMode
-                  ? "bg-gradient-to-r from-orange-600 to-blue-600 hover:from-orange-700 hover:to-blue-700"
-                  : "bg-gradient-to-r from-orange-500 to-blue-500 hover:from-orange-600 hover:to-blue-600"
+                  ? "bg-linear-to-r from-orange-600 to-blue-600 hover:from-orange-700 hover:to-blue-700"
+                  : "bg-linear-to-r from-orange-500 to-blue-500 hover:from-orange-600 hover:to-blue-600"
               } text-white transform hover:scale-105`}
             >
               Start Analysis

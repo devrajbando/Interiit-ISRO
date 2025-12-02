@@ -172,7 +172,7 @@ localStorage.setItem("GeoNLI_Sessions", JSON.stringify(updatedUserSessions));
               <div
                 className={`max-w-xs lg:max-w-md px-4 py-3 rounded-2xl shadow-lg transition-all ${
                   msg.role === "user"
-                    ? "bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-br-none"
+                    ? "bg-blue-600 text-white rounded-br-none"
                     : darkMode
                     ? "bg-gray-700 text-gray-100 rounded-bl-none"
                     : "bg-gray-200 text-gray-900 rounded-bl-none"

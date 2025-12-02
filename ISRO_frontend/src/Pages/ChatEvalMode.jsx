@@ -296,7 +296,7 @@ const ChatEvalMode = () => {
                       ? darkMode 
                         ? 'bg-gray-700 text-gray-400 cursor-not-allowed'
                         : 'bg-gray-200 text-gray-500 cursor-not-allowed'
-                      : 'px-4 py-2 bg-orange-600 text-white font-bold rounded shadow-lg hover:bg-orange-700 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 transition-transform transition-colors'
+                      : 'px-4 py-2 bg-orange-600 text-white font-bold rounded shadow-lg hover:bg-orange-700 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 transition-colors'
                   }`}
                 >
                   {isProcessing ? (

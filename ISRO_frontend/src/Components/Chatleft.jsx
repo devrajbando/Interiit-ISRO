@@ -59,12 +59,10 @@ export default function ChatLeft() {
           type="button"
           onClick={() => setOpen(true)}
           className={`px-3 py-2 text-sm transition-all rounded-lg shadow-lg hover:shadow-xl text-white font-medium flex items-center gap-2 transform hover:scale-105 ${
-            darkMode 
-              ? "bg-gradient-to-r from-orange-600 to-blue-600 hover:from-orange-700 hover:to-blue-700"
-              : "bg-gradient-to-r from-orange-500 to-blue-500 hover:from-orange-600 hover:to-blue-600"
+             darkMode ? 'bg-orange-600/20' : 'bg-orange-100'
           }`}
         >
-          <Diff className="w-4 h-4" />
+          <Diff className={`w-5 h-5 ${darkMode ? 'text-orange-400' : 'text-orange-600'}`} />
           New Chat
         </button>
       </div>
@@ -86,9 +84,7 @@ export default function ChatLeft() {
               onClick={() => setActiveSessionId(session)}
               className={`m-2 p-3 rounded-lg cursor-pointer transition-all duration-200 border ${
                 activeSessionId?.sessionId === session.sessionId
-                  ? darkMode
-                    ? "bg-gradient-to-r from-orange-900/60 to-blue-900/60 border-orange-500 shadow-lg"
-                    : "bg-gradient-to-r from-orange-100 to-blue-100 border-orange-400 shadow-md"
+                  ? darkMode ? 'bg-blue-600/20' : 'bg-blue-100'
                   : darkMode
                   ? "bg-gray-800 border-gray-700 hover:bg-gray-700/80"
                   : "bg-gray-100 border-gray-300 hover:bg-gray-200"
@@ -106,7 +102,7 @@ export default function ChatLeft() {
       </div>
 
       {open && (
-        <div className="fixed inset-0 flex items-center justify-center z-[999]">
+        <div className="fixed inset-0 flex items-center justify-center z-999">
           <div
             className="absolute inset-0 bg-black/60 backdrop-blur-md"
             onClick={() => {
@@ -120,7 +116,7 @@ export default function ChatLeft() {
               ? "bg-gray-900/95 border-gray-700 text-white" 
               : "bg-white/95 border-gray-300 text-gray-900"}
           `}>
-            <h2 className="text-2xl font-bold mb-6 bg-gradient-to-r from-orange-500 to-blue-500 bg-clip-text text-transparent">
+            <h2 className="text-2xl font-bold mb-6 bg-orange-500/70 bg-clip-text text-transparent">
               Create New Chat
             </h2>
             <input
@@ -160,8 +156,8 @@ export default function ChatLeft() {
                 disabled={!chatName.trim()}
                 className={`px-5 py-2 rounded-lg text-white font-medium transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 ${
                   darkMode
-                    ? "bg-gradient-to-r from-orange-600 to-blue-600 hover:from-orange-700 hover:to-blue-700"
-                    : "bg-gradient-to-r from-orange-500 to-blue-500 hover:from-orange-600 hover:to-blue-600"
+                    ? "bg-orange-600 hover:from-orange-700 hover:to-blue-700"
+                    : "bg-orange-500  hover:from-orange-600 hover:to-blue-600"
                 }`}
               >
                 Create

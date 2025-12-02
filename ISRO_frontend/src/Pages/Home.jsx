@@ -108,8 +108,8 @@ const {darkMode, toggleTheme} = useTheme();
             <FloatingElement delay={0}>
               <div className={`group p-8 rounded-3xl transition-all duration-300 ${
                 darkMode 
-                  ? 'bg-gradient-to-br from-gray-800 to-gray-900 hover:from-blue-900/50 hover:to-gray-900' 
-                  : 'bg-gradient-to-br from-white to-gray-50 hover:from-blue-50 hover:to-white'
+                  ? 'bg-linear-to-br from-gray-800 to-gray-900 hover:from-blue-900/50 hover:to-gray-900' 
+                  : 'bg-linear-to-br from-white to-gray-50 hover:from-blue-50 hover:to-white'
               } border-2 ${darkMode ? 'border-gray-700 hover:border-blue-500' : 'border-gray-200 hover:border-blue-300'} shadow-xl transform hover:scale-105 hover:-translate-y-2`}>
                 <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-6 ${
                   darkMode ? 'bg-blue-600' : 'bg-blue-500'
@@ -129,8 +129,8 @@ const {darkMode, toggleTheme} = useTheme();
             <FloatingElement delay={0.2} duration={3.5}>
               <div className={`group p-8 rounded-3xl transition-all duration-300 ${
                 darkMode 
-                  ? 'bg-gradient-to-br from-gray-800 to-gray-900 hover:from-purple-900/50 hover:to-gray-900' 
-                  : 'bg-gradient-to-br from-white to-gray-50 hover:from-purple-50 hover:to-white'
+                  ? 'bg-linear-to-br from-gray-800 to-gray-900 hover:from-purple-900/50 hover:to-gray-900' 
+                  : 'bg-linear-to-br from-white to-gray-50 hover:from-purple-50 hover:to-white'
               } border-2 ${darkMode ? 'border-gray-700 hover:border-purple-500' : 'border-gray-200 hover:border-purple-300'} shadow-xl transform hover:scale-105 hover:-translate-y-2`}>
                 <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-6 ${
                   darkMode ? 'bg-purple-600' : 'bg-purple-500'
@@ -150,8 +150,8 @@ const {darkMode, toggleTheme} = useTheme();
             <FloatingElement delay={0.4} duration={4}>
               <div className={`group p-8 rounded-3xl transition-all duration-300 ${
                 darkMode 
-                  ? 'bg-gradient-to-br from-gray-800 to-gray-900 hover:from-pink-900/50 hover:to-gray-900' 
-                  : 'bg-gradient-to-br from-white to-gray-50 hover:from-pink-50 hover:to-white'
+                  ? 'bg-linear-to-br from-gray-800 to-gray-900 hover:from-pink-900/50 hover:to-gray-900' 
+                  : 'bg-linear-to-br from-white to-gray-50 hover:from-pink-50 hover:to-white'
               } border-2 ${darkMode ? 'border-gray-700 hover:border-pink-500' : 'border-gray-200 hover:border-pink-300'} shadow-xl transform hover:scale-105 hover:-translate-y-2`}>
                 <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-6 ${
                   darkMode ? 'bg-pink-600' : 'bg-pink-500'
@@ -169,38 +169,6 @@ const {darkMode, toggleTheme} = useTheme();
           </div>
         </div>
       </section>
-
-      {/* CTA Section */}
-      {/* <section className="relative py-32 px-6 overflow-visible">
-        <StarField />
-        <div className="relative z-10 max-w-4xl mx-auto text-center space-y-8">
-          <FloatingElement>
-            <div className={`inline-block p-4 rounded-full ${darkMode ? 'bg-blue-600/20' : 'bg-blue-500/20'} mb-4`}>
-              <Satellite className={`w-16 h-16 ${darkMode ? 'text-blue-400' : 'text-blue-600'}`} />
-            </div>
-          </FloatingElement>
-          
-          <h2 className={`text-4xl md:text-5xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-            Ready for Liftoff?
-          </h2>
-          
-          <p className={`text-xl ${darkMode ? 'text-gray-300' : 'text-gray-600'} max-w-2xl mx-auto`}>
-            Start exploring mission documentation with the power of AI. Your journey to the stars begins here.
-          </p>
-          
-          <button className={`group relative px-10 py-5 text-xl font-bold rounded-full transition-all duration-300 ${
-            darkMode 
-              ? 'bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-700 hover:via-purple-700 hover:to-pink-700' 
-              : 'bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 hover:from-blue-600 hover:via-purple-600 hover:to-pink-600'
-          } text-white shadow-2xl hover:shadow-3xl transform hover:scale-110`}>
-            <span className="flex items-center gap-3">
-              <Rocket className="w-6 h-6 transform group-hover:-translate-y-1 transition-transform" />
-              Start Your Mission
-              <Sparkles className="w-6 h-6" />
-            </span>
-          </button>
-        </div>
-      </section> */}
 
       
     </div>
