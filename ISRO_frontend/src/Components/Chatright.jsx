@@ -3,8 +3,7 @@ import { useTheme } from "../Context/theme/Themecontext.jsx";
 import { sessioncontext } from "../Context/session/sessioncontext.jsx";
 import { v4 as uuid } from "uuid";
 import handlemodelresponse from "./apicaller.js";
-
-import { Forward, SquareX,Send } from "lucide-react";
+import { Send, MessageSquare, Upload as UploadIcon } from "lucide-react";
 
 function createMessage(role, content) {
   return {
@@ -26,19 +25,13 @@ export default function Chatright() {
   const scrollContainerRef = useRef(null);
   const bottomRef = useRef(null);
 
-  const isDark = darkMode;
-  const bg = isDark ? "#0b0b0d" : "#F8F2E9";
-  const text = isDark ? "#ffffff" : "#000000";
-  const border = isDark ? "#1f1f22" : "#e3e3e3";
-
-
   useEffect(() => {
     if (bottomRef.current) {
       bottomRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [activeSessionId?.messages]);
 
-  // jab user chat switch kare → input / loading reset
+  // Reset input/loading when switching chats
   useEffect(() => {
     setMessage("");
     setAiLoading(false);
@@ -51,31 +44,26 @@ export default function Chatright() {
       if (!activeSessionId) return alert("Select a chat first!");
       if (aiLoading) return;
 
-
-      // snapshot so that async ke beech me activeSession change ho jaye to bhi
       const targetSessionId = activeSessionId.sessionId;
       const targetImageURL = activeSessionId.publicImageURL;
 
       const userMessage = createMessage("user", message);
 
-     // 1) Add user message to the correct session (immutably)
-const updatedUserSessions = sessions.map((s) => {
-  if (s.sessionId === targetSessionId) {
-    return {
-      ...s,
-      messages: [...s.messages, userMessage],
-    };
-  }
-  return s;
-});
+      // 1) Add user message to the correct session
+      const updatedUserSessions = sessions.map((s) => {
+        if (s.sessionId === targetSessionId) {
+          return {
+            ...s,
+            messages: [...s.messages, userMessage],
+          };
+        }
+        return s;
+      });
 
-setSessions(updatedUserSessions);
+      setSessions(updatedUserSessions);
+      localStorage.setItem("GeoNLI_Sessions", JSON.stringify(updatedUserSessions));
 
-
-     
-
-localStorage.setItem("GeoNLI_Sessions", JSON.stringify(updatedUserSessions));
-      // agar user abhi bhi isi chat me hai to activeSession bhi update karo
+      // Update active session if user is still in the same chat
       setActiveSessionId((prev) =>
         prev && prev.sessionId === targetSessionId
           ? {
@@ -85,9 +73,9 @@ localStorage.setItem("GeoNLI_Sessions", JSON.stringify(updatedUserSessions));
           : prev
       );
 
-
       setMessage("");
       setAiLoading(true);
+
       const res = await handlemodelresponse(
         message,
         targetSessionId,
@@ -98,20 +86,21 @@ localStorage.setItem("GeoNLI_Sessions", JSON.stringify(updatedUserSessions));
 
       const aiMessage = createMessage("ai", res);
 
-      // 3) AI msg session me daalo
+      // 2) Add AI message to session
       const updatedAISessions = updatedUserSessions.map((s) => {
         if (s.sessionId === targetSessionId) {
-          return { ...s,
+          return {
+            ...s,
             messages: [...s.messages, aiMessage],
           };
         }
         return s;
       });
 
-
       setSessions(updatedAISessions);
-      localStorage.setItem("GeoNLI_Sessions", JSON.stringify(updatedAiSessions));
-      // phir se, sirf tab activeSession update karo jab user still isi chat me ho
+      localStorage.setItem("GeoNLI_Sessions", JSON.stringify(updatedAISessions));
+
+      // Update active session
       setActiveSessionId((prev) =>
         prev && prev.sessionId === targetSessionId
           ? {
@@ -120,6 +109,7 @@ localStorage.setItem("GeoNLI_Sessions", JSON.stringify(updatedUserSessions));
             }
           : prev
       );
+
       setAiLoading(false);
     } catch (error) {
       console.log(error);
@@ -128,113 +118,163 @@ localStorage.setItem("GeoNLI_Sessions", JSON.stringify(updatedUserSessions));
   };
 
   return (
-    <div className={`flex flex-col h-full rounded-2xl border-2 transition-colors ${
-      darkMode ? "bg-gray-800/50 border-gray-700" : "bg-white border-gray-200"
+    <div className={`flex flex-col h-full transition-colors ${
+      darkMode ? "bg-gray-900 border-gray-800" : "bg-white border-gray-200"
     }`}>
       {/* NO CHAT SELECTED */}
       {!activeSessionId ? (
-        <div className="flex-1 flex items-center justify-center opacity-70">
-          Select or create a chat to talk with GeoNLI
+        <div className="flex-1 flex flex-col items-center justify-center p-8">
+          <div className={`w-20 h-20 rounded-full flex items-center justify-center mb-6 ${
+            darkMode ? 'bg-gray-800' : 'bg-gray-200'
+          }`}>
+            <MessageSquare className={`w-10 h-10 ${darkMode ? 'text-gray-600' : 'text-gray-400'}`} />
+          </div>
+          <p className={`text-lg font-medium mb-2 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+            No Chat Selected
+          </p>
+          <p className={`text-sm text-center ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>
+            Select or create a chat to start analyzing
+          </p>
         </div>
-      ) : null}
-
-      {/* IMAGE NOT UPLOADED */}
-      {activeSessionId && !activeSessionId.publicImageURL ? (
-        <div className="flex-1 flex items-center justify-center opacity-70">
-          Upload image to start chat
+      ) : !activeSessionId.publicImageURL ? (
+        /* IMAGE NOT UPLOADED */
+        <div className="flex-1 flex flex-col items-center justify-center p-8">
+          <div className={`w-20 h-20 rounded-full flex items-center justify-center mb-6 ${
+            darkMode ? 'bg-gray-800' : 'bg-gray-200'
+          }`}>
+            <UploadIcon className={`w-10 h-10 ${darkMode ? 'text-gray-600' : 'text-gray-400'}`} />
+          </div>
+          <p className={`text-lg font-medium mb-2 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+            No Image Uploaded
+          </p>
+          <p className={`text-sm text-center ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>
+            Upload a satellite image to begin analysis
+          </p>
         </div>
-      ) :
-      (
-
-      
-            
-       <>
-       
-       {/* Messages Container */}
-
-      <div
-        ref={scrollContainerRef}
-        className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-transparent"
-      >
-        {activeSessionId?.messages?.length === 0 ? (
-          <div className="flex items-center justify-center h-full">
-            <p className={`text-center opacity-60 ${darkMode ? "text-gray-400" : "text-gray-500"}`}>
-              Start the conversation...
+      ) : (
+        /* MAIN CHAT INTERFACE */
+        <>
+          {/* Header */}
+          <div className={`px-6 py-4 border-b shrink-0 ${
+            darkMode ? 'border-gray-800 bg-gray-800/50' : 'border-gray-200 bg-gray-50'
+          }`}>
+            <h2 className={`text-lg font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+              Chat Analysis
+            </h2>
+            <p className={`text-sm mt-1 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+              Ask questions about the satellite imagery
             </p>
           </div>
-        ) : (
-          activeSessionId?.messages?.map((msg) => (
-            <div
-              key={msg.id}
-              className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
-            >
 
-              <div
-                className={`max-w-xs lg:max-w-md px-4 py-3 rounded-2xl shadow-lg transition-all ${
-                  msg.role === "user"
-                    ? "bg-blue-600 text-white rounded-br-none"
-                    : darkMode
-                    ? "bg-gray-700 text-gray-100 rounded-bl-none"
-                    : "bg-gray-200 text-gray-900 rounded-bl-none"
-                }`}
-              >
-                <p className="text-sm leading-relaxed">{msg.content}</p>
-                <p className={`text-xs mt-2 opacity-70 ${
-                  msg.role === "user" ? "text-blue-100" : darkMode ? "text-gray-400" : "text-gray-500"
-                }`}>
-                  {new Date(msg.createdAt).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
-                </p>
-              </div>
-
-            </div>
-          ))
-        )}
-        {aiLoading && (
-          <div className="flex justify-start">
-            <div className={`px-4 py-3 rounded-2xl rounded-bl-none ${
-              darkMode ? "bg-gray-700" : "bg-gray-200"
-            }`}>
-              <div className="flex gap-2">
-                <div className="w-2 h-2 rounded-full bg-gray-500 animate-bounce" />
-                <div className="w-2 h-2 rounded-full bg-gray-500 animate-bounce delay-100" />
-                <div className="w-2 h-2 rounded-full bg-gray-500 animate-bounce delay-200" />
-              </div>
-            </div>
-          </div>
-        )}
-        <div ref={bottomRef} />
-      </div>
-
-      {/* Input Area */}
-      <div className={`border-t p-2 ${darkMode ? "border-gray-700" : "border-gray-200"}`}>
-        <div className="flex gap-3">
-          <input
-            type="text"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            onKeyPress={(e) => e.key === "Enter" && handleSend(e)}
-            placeholder="Type your question..."
-            disabled={aiLoading}
-            className={`flex-1 p-3 rounded-lg border-2 outline-none transition-all ${
-              darkMode
-                ? "bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:border-blue-500"
-                : "bg-gray-100 border-gray-300 text-gray-900 placeholder-gray-500 focus:border-blue-500"
-            } disabled:opacity-50`}
-          />
-          <button
-            onClick={handleSend}
-            disabled={aiLoading || !message.trim()}
-            className="px-4 py-3 rounded-lg bg-orange-600 text-white font-semibold transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105"
+          {/* Messages Container */}
+          <div
+            ref={scrollContainerRef}
+            className="flex-1 overflow-y-auto p-6 space-y-4 min-h-0"
           >
-            <Send className="w-5 h-5" />
-          </button>
-        </div>
-      </div>
-      </>)}
+            {activeSessionId?.messages?.length === 0 ? (
+              <div className="flex items-center justify-center h-full">
+                <div className="text-center">
+                  <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 ${
+                    darkMode ? 'bg-gray-800' : 'bg-gray-200'
+                  }`}>
+                    <MessageSquare className={`w-8 h-8 ${darkMode ? 'text-gray-600' : 'text-gray-400'}`} />
+                  </div>
+                  <p className={`font-medium mb-2 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                    Start the conversation
+                  </p>
+                  <p className={`text-sm ${darkMode ? 'text-gray-600' : 'text-gray-500'}`}>
+                    Type a question below to analyze the image
+                  </p>
+                </div>
+              </div>
+            ) : (
+              activeSessionId?.messages?.map((msg) => (
+                <div
+                  key={msg.id}
+                  className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"} animate-fadeInUp`}
+                >
+                  <div
+                    className={`max-w-[75%] px-4 py-3 rounded-2xl shadow-md transition-all ${
+                      msg.role === "user"
+                        ? "bg-blue-600 text-white rounded-br-sm"
+                        : darkMode
+                        ? "bg-gray-800 text-gray-100 rounded-bl-sm border border-gray-700"
+                        : "bg-gray-100 text-gray-900 rounded-bl-sm border border-gray-200"
+                    }`}
+                  >
+                    <p className="text-sm leading-relaxed whitespace-pre-wrap wrap-break-word">
+                      {msg.content}
+                    </p>
+                    <p className={`text-xs mt-2 ${
+                      msg.role === "user" 
+                        ? "text-white/70" 
+                        : darkMode ? "text-gray-500" : "text-gray-500"
+                    }`}>
+                      {new Date(msg.createdAt).toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </p>
+                  </div>
+                </div>
+              ))
+            )}
 
+            {/* AI Loading Animation */}
+            {aiLoading && (
+              <div className="flex justify-start animate-fadeInUp">
+                <div className={`px-5 py-4 rounded-2xl rounded-bl-sm border shadow-md ${
+                  darkMode ? "bg-gray-800 border-gray-700" : "bg-gray-100 border-gray-200"
+                }`}>
+                  <div className="flex gap-2 items-center">
+                    <div className={`w-2 h-2 rounded-full animate-bounce ${
+                      darkMode ? 'bg-orange-400' : 'bg-orange-600'
+                    }`} style={{ animationDelay: '0ms' }} />
+                    <div className={`w-2 h-2 rounded-full animate-bounce ${
+                      darkMode ? 'bg-blue-400' : 'bg-blue-600'
+                    }`} style={{ animationDelay: '150ms' }} />
+                    <div className={`w-2 h-2 rounded-full animate-bounce ${
+                      darkMode ? 'bg-orange-400' : 'bg-orange-600'
+                    }`} style={{ animationDelay: '300ms' }} />
+                  </div>
+                </div>
+              </div>
+            )}
+            <div ref={bottomRef} />
+          </div>
+
+          {/* Input Area */}
+          <div className={`px-6 py-4 border-t shrink-0 ${
+            darkMode ? 'border-gray-800 bg-gray-800/50' : 'border-gray-200 bg-gray-50'
+          }`}>
+            <form onSubmit={handleSend} className="flex gap-3">
+              <input
+                type="text"
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                placeholder="Ask a question about the image..."
+                disabled={aiLoading}
+                className={`flex-1 px-4 py-3 rounded-xl border-2 outline-none transition-all ${
+                  darkMode
+                    ? "bg-gray-900 border-gray-700 text-white placeholder-gray-500 focus:border-orange-500"
+                    : "bg-white border-gray-300 text-gray-900 placeholder-gray-400 focus:border-orange-400"
+                } disabled:opacity-50 disabled:cursor-not-allowed`}
+              />
+              <button
+                type="submit"
+                disabled={aiLoading || !message.trim()}
+                className={`px-5 py-3 rounded-xl font-semibold transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 active:scale-95 flex items-center gap-2 ${
+                  darkMode
+                    ? 'bg-orange-600  hover:from-orange-700 hover:to-blue-700'
+                    : 'bg-orange-500  hover:from-orange-600 hover:to-blue-600'
+                } text-white`}
+              >
+                <Send className="w-5 h-5" />
+              </button>
+            </form>
+          </div>
+        </>
+      )}
     </div>
   );
 }

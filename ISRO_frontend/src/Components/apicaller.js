@@ -54,7 +54,7 @@ const handlemodelresponse = async (prompt, imageURL, image_id) => {
     // });
     console.log("🔥 Model Response → ");
     await new Promise((resolve) => setTimeout(resolve, 2000));
-    return "Hello I am genniess ask me what you want to ask";
+    return "Hello I am GeoNLI! how can I help you?";
   } catch (error) {
     console.error("❌ Model API Error:", error);
     return error;

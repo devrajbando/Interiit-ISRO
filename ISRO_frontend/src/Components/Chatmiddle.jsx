@@ -1,17 +1,13 @@
 // src/components/Chatmiddle.jsx
 import { useContext, useEffect, useRef, useState } from "react";
-
+import { Upload, Image as ImageIcon, CheckCircle, X } from "lucide-react";
 import { sessioncontext } from "../Context/session/sessioncontext.jsx";
 import { useTheme } from "../Context/theme/Themecontext.jsx";
+
 export default function Chatmiddle() {
-  
-  const {darkMode, toggleTheme} = useTheme();
+  const { darkMode } = useTheme();
   const { sessions, setSessions, activeSessionId, setActiveSessionId } =
     useContext(sessioncontext);
-  const isDark = darkMode;
-  const bg = isDark ? "bg-gray-900" : "bg-gray-300";
-  const text = isDark ? "text-gray-200" : "text-gray-900";
-  const border = isDark ? "border-gray-700" : "border-gray-300";
 
   const [tempPreview, setTempPreview] = useState(null);
   const [finalImage, setFinalImage] = useState(null);
@@ -53,6 +49,13 @@ export default function Chatmiddle() {
   const handleFiles = (files) => {
     if (!files || files.length === 0) return;
     const file = files[0];
+    
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      alert('Please upload an image file');
+      return;
+    }
+    
     const url = URL.createObjectURL(file);
     if (tempPreview) URL.revokeObjectURL(tempPreview);
     fileRef.current = file;
@@ -92,7 +95,7 @@ export default function Chatmiddle() {
   };
 
   const cancel = () => {
-    URL.revokeObjectURL(tempPreview);
+    if (tempPreview) URL.revokeObjectURL(tempPreview);
     setTempPreview(null);
     fileRef.current = null;
   };
@@ -118,55 +121,98 @@ export default function Chatmiddle() {
       if (tempPreview) URL.revokeObjectURL(tempPreview);
       if (finalImage) URL.revokeObjectURL(finalImage);
     };
-  }, []);
+  }, [tempPreview, finalImage]);
 
+  // No active session state
   if (!activeSessionId) {
     return (
-      <div
-        className={`h-full w-full flex items-center justify-center ${bg} ${text} overflow-hidden`}
-      >
-        <p className="opacity-60">
-          No current chat. Please upload image or select a session.
+      <div className={`h-full w-full flex flex-col items-center justify-center p-8 ${
+        darkMode ? 'bg-gray-900' : 'bg-gray-50'
+      }`}>
+        <div className={`w-20 h-20 rounded-full flex items-center justify-center mb-6 ${
+          darkMode ? 'bg-gray-800' : 'bg-gray-200'
+        }`}>
+          <ImageIcon className={`w-10 h-10 ${darkMode ? 'text-gray-600' : 'text-gray-400'}`} />
+        </div>
+        <p className={`text-lg font-medium mb-2 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+          No Active Session
+        </p>
+        <p className={`text-sm text-center ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>
+          Select a session or create a new one to begin analyzing satellite imagery
         </p>
       </div>
     );
   }
 
   return (
-    <div
-      className={`m-8 relative h-full w-full flex items-center justify-center ${bg} ${text} overflow-hidden p-2`}
-    >
+    <div className={`relative h-full w-full flex items-center justify-center overflow-hidden ${
+      darkMode ? 'bg-gray-900' : 'bg-gray-50'
+    }`}>
       {activeSessionId.publicImageURL ? (
-        <>
-          <div className="relative w-full h-full flex items-start justify-start">
-            <img
-              src={activeSessionId.publicImageURL}
-              alt="Uploaded"
-              className="max-w-full max-h-full object-contain rounded-lg shadow-2xl"
-            />
-          </div>
-        </>
+        // Image Display
+        <div className="relative w-full h-full flex items-center justify-center p-8">
+          <img
+            src={activeSessionId.publicImageURL}
+            alt="Satellite imagery"
+            className={`max-w-full max-h-full object-contain rounded-2xl shadow-2xl border-2 ${
+              darkMode ? 'border-gray-700' : 'border-gray-200'
+            }`}
+          />
+        </div>
       ) : (
+        // Upload Area
         <>
-          <div className="absolute inset-0 flex flex-col items-center justify-center px-6">
+          <div className="absolute inset-0 flex flex-col items-center justify-center p-8">
             <div
               onDragOver={dragOver}
               onDragLeave={dragLeave}
               onDrop={drop}
-              className={`${border} ${
-                dragActive
-                  ? "shadow-[0_0_20px_rgba(0,150,255,0.4)] border-blue-500"
-                  : ""
-              }
-              border-2 border-dashed rounded-xl w-[400px] max-w-[85%] h-[220px] flex 
-              flex-col items-center justify-center gap-3 cursor-pointer transition`}
               onClick={() => fileInputRef.current.click()}
+              className={`
+                relative w-full max-w-2xl h-96 rounded-2xl border-2 border-dashed
+                flex flex-col items-center justify-center gap-6 cursor-pointer
+                transition-all duration-300 group
+                ${dragActive
+                  ? darkMode
+                    ? 'border-orange-500 bg-orange-600/10 shadow-lg shadow-orange-500/20'
+                    : 'border-orange-400 bg-orange-50 shadow-lg shadow-orange-400/20'
+                  : darkMode
+                  ? 'border-gray-700 hover:border-gray-600 hover:bg-gray-800/50'
+                  : 'border-gray-300 hover:border-gray-400 hover:bg-gray-100'
+                }
+              `}
             >
-              <p className="text-lg font-medium opacity-80">
-                Drag & drop an image
-              </p>
-              <p className="text-sm opacity-60">or click to browse</p>
+              {/* Upload Icon */}
+              <div className={`
+                w-20 h-20 rounded-2xl flex items-center justify-center transition-all duration-300
+                ${dragActive
+                  ? darkMode ? 'bg-orange-600/20' : 'bg-orange-200'
+                  : darkMode ? 'bg-gray-800 group-hover:bg-gray-700' : 'bg-gray-200 group-hover:bg-gray-300'
+                }
+              `}>
+                <Upload className={`w-10 h-10 transition-transform group-hover:scale-110 ${
+                  dragActive
+                    ? darkMode ? 'text-orange-400' : 'text-orange-600'
+                    : darkMode ? 'text-gray-400' : 'text-gray-600'
+                }`} />
+              </div>
 
+              {/* Text */}
+              <div className="text-center px-6">
+                <p className={`text-xl font-semibold mb-2 ${
+                  darkMode ? 'text-white' : 'text-gray-900'
+                }`}>
+                  {dragActive ? 'Drop your image here' : 'Upload Satellite Image'}
+                </p>
+                <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                  Drag and drop an image file, or click to browse
+                </p>
+                <p className={`text-xs mt-3 ${darkMode ? 'text-gray-600' : 'text-gray-500'}`}>
+                  Supports: JPG, PNG, TIFF • Max resolution: 2048x2048
+                </p>
+              </div>
+
+              {/* Hidden File Input */}
               <input
                 type="file"
                 ref={fileInputRef}
@@ -175,55 +221,103 @@ export default function Chatmiddle() {
                 onChange={(e) => handleFiles(e.target.files)}
               />
             </div>
-            <p className="text-xs mt-4 opacity-50">
-              Only one image allowed per session
-            </p>
           </div>
 
+          {/* Preview Modal */}
           {tempPreview && (
-            <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm px-6">
-              <div
-                className={`rounded-xl p-6 shadow-2xl ${
-                  isDark ? "bg-[#141416]" : "bg-white"
-                } w-[320px]`}
-              >
-                <p className="text-sm opacity-70 mb-3">
-                  Preview selected image
-                </p>
-
-                <img
-                  src={tempPreview}
-                  alt="Preview"
-                  className="w-full h-48 object-contain rounded-md border border-gray-600 mb-4"
-                />
-
-                <div className="flex gap-3">
-                  <button
-                    onClick={confirm}
-                    disabled={uploading}
-                    className={`flex-1 px-4 py-2 rounded-lg text-white 
-                  ${
-                    uploading
-                      ? "bg-blue-400 cursor-not-allowed"
-                      : "bg-blue-600 hover:bg-blue-700"
-                  }`}
-                  >
-                    {uploading ? (
-                      <div className="flex items-center justify-center gap-2">
-                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                        Uploading...
-                      </div>
-                    ) : (
-                      "Continue"
-                    )}
-                  </button>
-
+            <div className="absolute inset-0 flex items-center justify-center bg-black/60 backdrop-blur-md p-8 z-50">
+              <div className={`
+                rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden
+                ${darkMode ? 'bg-gray-900/95 border-2 border-gray-700' : 'bg-white/95 border-2 border-gray-300'}
+              `}>
+                {/* Header */}
+                <div className={`px-6 py-4 border-b flex items-center justify-between ${
+                  darkMode ? 'border-gray-700 bg-gray-800/50' : 'border-gray-200 bg-gray-50'
+                }`}>
+                  <div className="flex items-center gap-3">
+                    <div className={`p-2 rounded-lg ${
+                      darkMode ? 'bg-orange-600/20' : 'bg-orange-100'
+                    }`}>
+                      <ImageIcon className={`w-5 h-5 ${
+                        darkMode ? 'text-orange-400' : 'text-orange-600'
+                      }`} />
+                    </div>
+                    <h3 className={`text-lg font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                      Preview Image
+                    </h3>
+                  </div>
                   <button
                     onClick={cancel}
                     disabled={uploading}
-                    className="flex-1 px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded-lg text-white"
+                    className={`p-2 rounded-lg transition-colors ${
+                      darkMode
+                        ? 'hover:bg-gray-700 text-gray-400'
+                        : 'hover:bg-gray-200 text-gray-600'
+                    }`}
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+
+                {/* Image Preview */}
+                <div className="p-6">
+                  <div className={`relative rounded-xl overflow-hidden border-2 ${
+                    darkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-gray-50'
+                  }`}>
+                    <img
+                      src={tempPreview}
+                      alt="Preview"
+                      className="w-full h-80 object-contain"
+                    />
+                  </div>
+
+                  <p className={`text-sm mt-4 text-center ${
+                    darkMode ? 'text-gray-400' : 'text-gray-600'
+                  }`}>
+                    Ready to upload and analyze this image?
+                  </p>
+                </div>
+
+                {/* Actions */}
+                <div className={`px-6 py-4 border-t flex gap-3 ${
+                  darkMode ? 'border-gray-700 bg-gray-800/50' : 'border-gray-200 bg-gray-50'
+                }`}>
+                  <button
+                    onClick={cancel}
+                    disabled={uploading}
+                    className={`
+                      flex-1 px-5 py-3 rounded-xl font-semibold transition-all border-2
+                      ${darkMode
+                        ? 'border-gray-600 text-gray-300 hover:bg-gray-800 hover:border-gray-500'
+                        : 'border-gray-400 text-gray-700 hover:bg-gray-100 hover:border-gray-500'}
+                      disabled:opacity-50 disabled:cursor-not-allowed
+                    `}
                   >
                     Cancel
+                  </button>
+                  <button
+                    onClick={confirm}
+                    disabled={uploading}
+                    className={`
+                      flex-1 px-5 py-3 rounded-xl font-semibold text-white transition-all
+                      shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed
+                      transform hover:scale-105 active:scale-95
+                      ${darkMode
+                        ? 'bg-linear-to-r from-orange-600 to-blue-600 hover:from-orange-700 hover:to-blue-700'
+                        : 'bg-linear-to-r from-orange-500 to-blue-500 hover:from-orange-600 hover:to-blue-600'}
+                    `}
+                  >
+                    {uploading ? (
+                      <span className="flex items-center justify-center gap-2">
+                        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                        Uploading...
+                      </span>
+                    ) : (
+                      <span className="flex items-center justify-center gap-2">
+                        <CheckCircle className="w-5 h-5" />
+                        Confirm & Upload
+                      </span>
+                    )}
                   </button>
                 </div>
               </div>

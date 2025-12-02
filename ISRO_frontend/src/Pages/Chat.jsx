@@ -12,7 +12,7 @@ export default function Chat() {
   const { darkMode } = useTheme();
 
   return (
-    <div className={`relative flex flex-col min-h-screen h-auto overflow-y-auto z-0 ${
+    <div className={`relative flex flex-col max-h-screen h-auto overflow-y-auto z-0 ${
       darkMode ? 'bg-gray-900' : 'bg-gray-300'
     }`}>
       {/* Modern Header */}
@@ -72,7 +72,7 @@ export default function Chat() {
       {/* Panels */}
       {mode === "interactive" ? (
         <PanelGroup direction="horizontal" className="p-6 flex-1 flex min-h-[calc(100vh-88px)]">
-          <Panel defaultSize={25} minSize={15}>
+          <Panel defaultSize={20} minSize={20}>
             <ChatLeft />
           </Panel>
 
@@ -82,7 +82,7 @@ export default function Chat() {
               : 'bg-gray-300 hover:bg-orange-400'
           } cursor-col-resize`} />
 
-          <Panel defaultSize={50} minSize={30}>
+          <Panel defaultSize={40} minSize={40}>
             <Chatmiddle />
           </Panel>
 
@@ -92,7 +92,7 @@ export default function Chat() {
               : 'bg-gray-300 hover:bg-blue-400'
           } cursor-col-resize`} />
 
-          <Panel defaultSize={25} minSize={20}>
+          <Panel defaultSize={40} minSize={30}>
             <Chatright />
           </Panel>
         </PanelGroup>
