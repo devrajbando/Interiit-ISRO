@@ -129,9 +129,14 @@ const Dashboard = () => {
 
           <button
             onClick={() => navigate("/chat")}
-            className="group relative flex items-center gap-2 px-6 py-4 font-semibold rounded-xl bg-orange-500 text-white shadow-lg hover:bg-orange-600 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 active:shadow-md transition-all duration-200 overflow-hidden"
+            className={`px-4 py-2 text-sm transition-all rounded-xl shadow-md  font-semibold flex items-center gap-2 transform hover:scale-105 active:scale-95 ${
+            darkMode 
+              ? 'bg-orange-600/20 text-orange-400 hover:bg-orange-600/30  border-orange-600/30' 
+              : 'bg-orange-100 text-orange-700 hover:bg-orange-200  border-orange-200'
+          }`}
           >
-            <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-linear-to-r from-transparent via-white/20 to-transparent" />
+            
+            
 
             <Plus className="w-5 h-5 relative z-10" />
             <span className="relative z-10">New Analysis</span>
@@ -315,7 +320,7 @@ const Dashboard = () => {
 
   return (
     <>
-      <StarField />
+      {/* <StarField /> */}
       <DashboardPage />
     </>
   );

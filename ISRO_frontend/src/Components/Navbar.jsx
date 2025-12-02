@@ -17,11 +17,9 @@ const {darkMode, toggleTheme} = useTheme();
     <>
     
     {/* Navigation */}
-      <nav className={`sticky top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        
-           darkMode ? 'bg-gray-900/95 backdrop-blur-lg shadow-lg' : 'bg-gray-300 backdrop-blur-lg shadow-lg'
-          
-      }`}>
+      <nav className={`sticky top-0 left-0 right-0 z-50 transition-all duration-300 
+         ${ darkMode ? 'bg-gray-900 backdrop-blur-lg shadow-lg' : 'bg-gray-300 backdrop-blur-lg shadow-lg' }
+      `}>
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -62,59 +60,7 @@ const {darkMode, toggleTheme} = useTheme();
           </div>
         </div>
       </nav>
-        {/* <style>{`
-        @keyframes float {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-20px); }
-        }
-        @keyframes twinkle {
-          0%, 100% { opacity: 0.2; }
-          50% { opacity: 1; }
-        }
-        @keyframes orbit {
-          from { transform: rotate(0deg) translateX(100px) rotate(0deg); }
-          to { transform: rotate(360deg) translateX(100px) rotate(-360deg); }
-        }
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        @keyframes slideInLeft {
-          from {
-            opacity: 0;
-            transform: translateX(-30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateX(0);
-          }
-        }
-        @keyframes pulse {
-          0%, 100% { transform: scale(1); opacity: 1; }
-          50% { transform: scale(1.05); opacity: 0.8; }
-        }
-        .animate-fadeInUp {
-          animation: fadeInUp 0.8s ease-out forwards;
-        }
-        .animate-slideInLeft {
-          animation: slideInLeft 0.8s ease-out forwards;
-        }
-      `}</style> */}
-       {/* <Globee className='text-orange'/> */}
-        {/* Orbiting Satellites */}
-        {/* <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <div className="relative w-64 h-64">
-            <div style={{ animation: 'orbit 20s linear infinite' }}>
-              <Satellite className={`w-8 h-8 ${darkMode ? 'text-blue-400' : 'text-blue-500'}`} />
-            </div>
-          </div>
-        </div> */}
+      
       </>
   );
 }

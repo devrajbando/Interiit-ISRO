@@ -6,6 +6,8 @@ import Chat from "./Pages/Chat.jsx";
 import Dashboard from "./Pages/Dashboard.jsx";
 import Footer from "./Components/Footer.jsx";
 import Themeprovider from "./Context/theme/Themeprovider.jsx";
+import StarField from "./Components/ui/StarField";
+
 export default function App() {
   return (
     <div className="w-screen h-screen bg-white dark:bg-[#0d0d0f] transition-colors duration-300 overflow-x-hidden scrollbar-hide">
@@ -14,6 +16,8 @@ export default function App() {
       
       <div>
         <BrowserRouter>
+          <StarField/>
+         
       <Navbar />  
           <Routes>
             <Route path="/" element={<Home />} />

@@ -5,6 +5,7 @@ import StarField from '../Components/ui/StarField.jsx';
 import { TypingAnimation } from "../Components/ui/typing-animation.jsx"
 import { useTheme } from "../Context/theme/Themecontext";
 import TextType from '../Components/ui/TextType.jsx';
+
 function Home() {
   const navigate = useNavigate();
   const [scrollY, setScrollY] = useState(0);
@@ -39,7 +40,7 @@ const {darkMode, toggleTheme} = useTheme();
     
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center overflow-visible px-6 ">
-        <StarField />
+        {/* <StarField /> */}
         <div className="relative z-10 max-w-5xl w-full text-center space-y-8">
           {/* Main Heading */}
           <div className={`space-y-6 ${isVisible ? 'animate-fadeInUp' : 'opacity-0'}`}>
@@ -77,7 +78,10 @@ const {darkMode, toggleTheme} = useTheme();
             <button 
            onClick={() => navigate("/dashboard")}
             className={`group relative px-8 py-4 text-lg font-semibold rounded-full transition-all duration-300 bg-blue-700 hover:bg-orange-700
-           text-white shadow-lg hover:shadow-2xl transform hover:scale-105`}>
+           text-white shadow-lg hover:shadow-2xl transform hover:scale-105
+          
+             `}
+           >
               <span className="flex items-center gap-2">
                 <Rocket className="w-5 h-5" />
                 Get Started
@@ -92,14 +96,14 @@ const {darkMode, toggleTheme} = useTheme();
 
       {/* Features Section */}
       <section className={`relative py-20 px-6 ${darkMode ? 'bg-gray-900/50' : 'bg-white/50'} backdrop-blur-sm`}>
-      <StarField/>
+      {/* <StarField/> */}
         <div className="z-1 max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className={`text-4xl md:text-5xl font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
               Mission-Ready Features
             </h2>
             <p className={`text-xl ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-              Built for space exploration and beyond
+              Built to Simplify Access to Earth Observation Data
             </p>
           </div>
 
@@ -117,10 +121,10 @@ const {darkMode, toggleTheme} = useTheme();
                   <Info className="w-8 h-8 text-white" />
                 </div>
                 <h3 className={`text-2xl font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                 Smart Captioning 
+                 Precise Satellite Captioning 
                 </h3>
                 <p className={`${darkMode ? 'text-gray-400' : 'text-gray-600'} leading-relaxed`}>
-                  Get instant responses to complex queries about mission specs, payload data, and technical documentation
+                 Get a concise, accurate description summarizing the local and global attributes of small and large objects in the satellite image.
                 </p>
               </div>
             </FloatingElement>
@@ -138,10 +142,10 @@ const {darkMode, toggleTheme} = useTheme();
                   <Globe className="w-8 h-8 text-white" />
                 </div>
                 <h3 className={`text-2xl font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                  Intelligent Grounding
+                  Visual Object Grounding
                 </h3>
                 <p className={`${darkMode ? 'text-gray-400' : 'text-gray-600'} leading-relaxed`}>
-                  Enterprise-grade security ensuring your mission-critical data stays protected and confidential
+                  Accurately localize objects based on a query, ensuring high scale resilience across different sampling rates.
                 </p>
               </div>
             </FloatingElement>
@@ -159,10 +163,10 @@ const {darkMode, toggleTheme} = useTheme();
                   <MessageSquare className="w-8 h-8 text-white" />
                 </div>
                 <h3 className={`text-2xl font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                  Visual Q&A
+                  Geospatial Visual Question Answering (VQA)
                 </h3>
                 <p className={`${darkMode ? 'text-gray-400' : 'text-gray-600'} leading-relaxed`}>
-                  AI-powered understanding of technical context, relationships, and dependencies across documents
+                 Provide accurate answers to binary, numeric, and semantic queries about the image
                 </p>
               </div>
             </FloatingElement>
