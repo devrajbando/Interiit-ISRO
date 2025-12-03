@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import {
-  Plus,
+  Plus,Brain,
   Search,
   Trash2,
   Calendar,
@@ -235,8 +235,8 @@ const Dashboard = () => {
                 : "bg-orange-100 text-orange-700 hover:bg-orange-200 border border-orange-200"
             }`}
           >
-            <Plus className="w-5 h-5" />
-            <span>New Analysis</span>
+            <Brain className="w-5 h-5" />
+            <span>Analyse</span>
           </button>
         </div>
 
@@ -471,16 +471,25 @@ const Dashboard = () => {
             </p>
 
             <button
-              onClick={() => {
-                setActiveSessionId(null);
-                navigate("/chat");
-              }}
-              className={`px-6 py-3 text-base font-semibold rounded-xl transition-all ${
-                darkMode
-                  ? "bg-gradient-to-r from-orange-600 to-blue-600 hover:from-orange-700 hover:to-blue-700"
-                  : "bg-gradient-to-r from-orange-500 to-blue-500 hover:from-orange-600 hover:to-blue-600"
-              } text-white hover:shadow-lg`}
-            >
+                  onClick={() => {
+                    setActiveSessionId(null);
+                    navigate("/chat");
+                  }}
+                  className={`
+                    px-6 py-3 
+                    rounded-xl 
+                    font-semibold text-base
+                    transition-all duration-200
+                    transform hover:scale-105 active:scale-95
+                    cursor-pointer
+                    ${darkMode
+                      ? 'bg-orange-600/80 hover:bg-orange-700 text-white'
+                      : 'bg-orange-500 hover:bg-orange-600 text-white'
+                    }
+                    shadow-lg hover:shadow-xl
+                    flex-row
+                  `}
+                >  
               Start Analysis
             </button>
           </div>
