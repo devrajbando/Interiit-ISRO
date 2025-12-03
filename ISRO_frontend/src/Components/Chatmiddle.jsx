@@ -225,103 +225,104 @@ export default function Chatmiddle() {
 
           {/* Preview Modal */}
           {tempPreview && (
-            <div className="absolute inset-0 flex items-center justify-center bg-black/60 backdrop-blur-md p-8 z-50">
-              <div className={`
-                rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden
-                ${darkMode ? 'bg-gray-900/95 border-2 border-gray-700' : 'bg-white/95 border-2 border-gray-300'}
-              `}>
-                {/* Header */}
-                <div className={`px-6 py-4 border-b flex items-center justify-between ${
-                  darkMode ? 'border-gray-700 bg-gray-800/50' : 'border-gray-200 bg-gray-50'
-                }`}>
-                  <div className="flex items-center gap-3">
-                    <div className={`p-2 rounded-lg ${
-                      darkMode ? 'bg-orange-600/20' : 'bg-orange-100'
-                    }`}>
-                      <ImageIcon className={`w-5 h-5 ${
-                        darkMode ? 'text-orange-400' : 'text-orange-600'
-                      }`} />
-                    </div>
-                    <h3 className={`text-lg font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                      Preview Image
-                    </h3>
-                  </div>
-                  <button
-                    onClick={cancel}
-                    disabled={uploading}
-                    className={`p-2 rounded-lg transition-colors ${
-                      darkMode
-                        ? 'hover:bg-gray-700 text-gray-400'
-                        : 'hover:bg-gray-200 text-gray-600'
-                    }`}
-                  >
-                    <X className="w-5 h-5" />
-                  </button>
-                </div>
+           <div className="absolute inset-0 flex items-center justify-center bg-black/60 backdrop-blur-md p-8 z-50">
+  <div className={`
+    relative
+    rounded-2xl shadow-2xl w-full max-w-lg
+    flex flex-col
+    max-h-[90vh]
+    ${darkMode ? 'bg-gray-900/95 border-2 border-gray-700' : 'bg-white/95 border-2 border-gray-300'}
+  `}>
+    {/* Header */}
+    <div className={`px-6 py-4 border-b shrink-0 flex items-center justify-between ${
+      darkMode ? 'border-gray-700 bg-gray-800/50' : 'border-gray-200 bg-gray-50'
+    }`}>
+      <div className="flex items-center gap-3">
+        <div className={`p-2 rounded-lg ${
+          darkMode ? 'bg-orange-600/20' : 'bg-orange-100'
+        }`}>
+          <ImageIcon className={`w-5 h-5 ${
+            darkMode ? 'text-orange-400' : 'text-orange-600'
+          }`} />
+        </div>
+        <h3 className={`text-lg font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+          Preview Image
+        </h3>
+      </div>
+      <button
+        onClick={cancel}
+        disabled={uploading}
+        className={`p-2 rounded-lg transition-colors ${
+          darkMode
+            ? 'hover:bg-gray-700 text-gray-400'
+            : 'hover:bg-gray-200 text-gray-600'
+        }`}
+      >
+        <X className="w-5 h-5" />
+      </button>
+    </div>
 
-                {/* Image Preview */}
-                <div className="p-6">
-                  <div className={`relative rounded-xl overflow-hidden border-2 ${
-                    darkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-gray-50'
-                  }`}>
-                    <img
-                      src={tempPreview}
-                      alt="Preview"
-                      className="w-full h-80 object-contain"
-                    />
-                  </div>
+    {/* Image Preview - Scrollable */}
+    <div className="p-6 flex-1 overflow-y-auto min-h-0">
+      <div className={`relative rounded-xl overflow-hidden border-2 ${
+        darkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-gray-50'
+      }`}>
+        <img
+          src={tempPreview}
+          alt="Preview"
+          className="w-full h-auto max-h-[30vh] object-contain"
+        />
+      </div>
 
-                  <p className={`text-sm mt-4 text-center ${
-                    darkMode ? 'text-gray-400' : 'text-gray-600'
-                  }`}>
-                    Ready to upload and analyze this image?
-                  </p>
-                </div>
+      <p className={`text-sm mt-4 text-center ${
+        darkMode ? 'text-gray-400' : 'text-gray-600'
+      }`}>
+        Ready to upload and analyze this image?
+      </p>
+    </div>
 
-                {/* Actions */}
-                <div className={`px-6 py-4 border-t flex gap-3 ${
-                  darkMode ? 'border-gray-700 bg-gray-800/50' : 'border-gray-200 bg-gray-50'
-                }`}>
-                  <button
-                    onClick={cancel}
-                    disabled={uploading}
-                    className={`
-                      flex-1 px-5 py-3 rounded-xl font-semibold transition-all border-2
-                      ${darkMode
-                        ? 'border-gray-600 text-gray-300 hover:bg-gray-800 hover:border-gray-500'
-                        : 'border-gray-400 text-gray-700 hover:bg-gray-100 hover:border-gray-500'}
-                      disabled:opacity-50 disabled:cursor-not-allowed
-                    `}
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    onClick={confirm}
-                    disabled={uploading}
-                    className={`
-                      flex-1 px-5 py-3 rounded-xl font-semibold text-white transition-all
-                      shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed
-                      transform hover:scale-105 active:scale-95
-                      ${darkMode
-                        ? 'bg-linear-to-r from-orange-600 to-blue-600 hover:from-orange-700 hover:to-blue-700'
-                        : 'bg-linear-to-r from-orange-500 to-blue-500 hover:from-orange-600 hover:to-blue-600'}
-                    `}
-                  >
-                    {uploading ? (
-                      <span className="flex items-center justify-center gap-2">
-                        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                        Uploading...
-                      </span>
-                    ) : (
-                      <span className="flex items-center justify-center gap-2">
-                        <CheckCircle className="w-5 h-5" />
-                        Confirm & Upload
-                      </span>
-                    )}
-                  </button>
-                </div>
-              </div>
-            </div>
+    {/* Actions */}
+    <div className={`px-6 py-4 border-t shrink-0 flex gap-3 ${
+      darkMode ? 'border-gray-700 bg-gray-800/50' : 'border-gray-200 bg-gray-50'
+    }`}>
+      <button
+        onClick={cancel}
+        disabled={uploading}
+        className={`
+          flex-1 px-5 py-3 rounded-xl font-semibold transition-all border-2
+          ${darkMode
+            ? 'border-gray-600 text-gray-300 hover:bg-gray-800 hover:border-gray-500'
+            : 'border-gray-400 text-gray-700 hover:bg-gray-100 hover:border-gray-500'}
+          disabled:opacity-50 disabled:cursor-not-allowed
+        `}
+      >
+        Cancel
+      </button>
+      <button
+        onClick={confirm}
+        disabled={uploading}
+        className='
+          flex-1 px-5 py-3 rounded-xl font-semibold text-white transition-all
+          shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed border-orange-700 border-2
+          transform hover:scale-105 active:scale-95
+          bg-orange-600/40 hover:bg-orange-600/80'
+           
+      >
+        {uploading ? (
+          <span className="flex items-center justify-center gap-2">
+            <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+            Uploading...
+          </span>
+        ) : (
+          <span className="flex items-center justify-center gap-2">
+            <CheckCircle className="w-5 h-5" />
+            Confirm & Upload
+          </span>
+        )}
+      </button>
+    </div>
+  </div>
+</div>
           )}
         </>
       )}

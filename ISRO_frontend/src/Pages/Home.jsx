@@ -225,8 +225,7 @@ function Home() {
                       darkMode ? "text-gray-400" : "text-gray-600"
                     } leading-relaxed`}
                   >
-                    Accurately localize objects based on a query, ensuring high
-                    scale resilience across different sampling rates.
+                    Accurately localize objects based on a query. Enhance detection reliability by maintaining consistent precision even under dynamic or noisy input conditions.
                   </p>
                 </div>
               </FloatingElement>

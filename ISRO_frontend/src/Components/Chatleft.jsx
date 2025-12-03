@@ -3,7 +3,16 @@ import { Plus, Trash2 } from "lucide-react";
 import { v4 as uuid } from "uuid";
 import { useTheme } from "../Context/theme/Themecontext.jsx";
 import { sessioncontext } from "../Context/session/sessioncontext.jsx";
-
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "../Components/ui/alert-dialog.jsx"
 function createNewSession(chatName) {
   return {
     sessionId: uuid(),
@@ -48,7 +57,7 @@ export default function ChatLeft() {
   const handleDelete = (e, sessionId) => {
     e.stopPropagation(); // Prevent triggering the session click
     
-    if (window.confirm("Are you sure you want to delete this chat?")) {
+    // if (window.confirm("Are you sure you want to delete this chat?")) {
       const updatedSessions = sessions.filter(s => s.sessionId !== sessionId);
       setSessions(updatedSessions);
       localStorage.setItem("GeoNLI_Sessions", JSON.stringify(updatedSessions));
@@ -57,7 +66,7 @@ export default function ChatLeft() {
       if (activeSessionId?.sessionId === sessionId) {
         setActiveSessionId(null);
       }
-    }
+    // }
   };
 
   return (
@@ -132,9 +141,11 @@ export default function ChatLeft() {
                   </div>
                   
                   {/* Delete Button */}
+                  <AlertDialog>
+  <AlertDialogTrigger>
                   <button
                     type="button"
-                    onClick={(e) => handleDelete(e, session.sessionId)}
+                    
                     className={`opacity-0 group-hover:opacity-100 p-2 rounded-lg transition-all shrink-0 ${
                       darkMode 
                         ? 'hover:bg-red-900/30 text-red-400 hover:text-red-300' 
@@ -144,6 +155,18 @@ export default function ChatLeft() {
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
+    
+    </AlertDialogTrigger>
+ <AlertDialogContent className="bg-gray-900 borderborder-gray-700 shadow-xl rounded-xl ring-2ring-orange-500/20">
+    <AlertDialogHeader>
+      <AlertDialogTitle className="text-gray-200">Are you sure you want to delete this session?</AlertDialogTitle>
+    </AlertDialogHeader>
+    <AlertDialogFooter>
+      <AlertDialogCancel>Cancel</AlertDialogCancel>
+      <AlertDialogAction className="bg-red-500/70 hover:bg-red-500/90" onClick={(e) => handleDelete(e, session.sessionId)}>Delete</AlertDialogAction>
+    </AlertDialogFooter>
+  </AlertDialogContent>
+</AlertDialog>
                 </div>
               </div>
             ))}

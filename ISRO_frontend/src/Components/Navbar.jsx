@@ -15,7 +15,7 @@ export default function Navbar() {
     <>
       {/* Navigation */}
       <nav
-        className={`  top-0 left-0 right-0 z-50 transition-all duration-300
+        className={`sticky top-0 left-0 right-0 z-50 transition-all duration-300
          ${
            darkMode
              ? "bg-gray-900 backdrop-blur-lg shadow-lg"
@@ -40,7 +40,7 @@ export default function Navbar() {
               {/* </div> */}
               <button onClick={() => navigate("/")}>
                 <span
-                  className={`text-xl font-bold block  cursor-pointer ${
+                  className={`text-xl text-left font-bold block  cursor-pointer ${
                     darkMode ? "text-white" : "text-gray-900"
                   }`}
                 >
