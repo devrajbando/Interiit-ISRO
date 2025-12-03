@@ -53,7 +53,7 @@ const handlemodelresponse = async (prompt, imageURL, image_id) => {
     //   headers: { "Content-Type": "application/json" },
     // });
     console.log("🔥 Model Response → ");
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    await new Promise((resolve) => setTimeout(resolve, 10000));
     return "Hello I am GeoNLI! how can I help you?";
   } catch (error) {
     console.error("❌ Model API Error:", error);

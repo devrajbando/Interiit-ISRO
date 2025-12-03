@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Globee } from "../Components/ui/globe";
-
+import { GlobeeLight } from "../Components/ui/globe-light";
+import { useTheme } from "../Context/theme/Themecontext.jsx";
 const ITEMS = [
   {
     title: "Analyze satellite imagery in seconds.",
@@ -29,14 +30,14 @@ export default function RunpodStyleSlider() {
   const [index, setIndex] = useState(0);
   const [progress, setProgress] = useState(0);
   const intervalRef = useRef(null);
-
+  const { darkMode } = useTheme();
   // Auto‑slide with progress bar
   useEffect(() => {
     setProgress(0);
 
     if (intervalRef.current) clearInterval(intervalRef.current);
 
-    const duration = 8000; // 5 seconds
+    const duration = 5000; // 5 seconds
     const steps = 100;
     const stepTime = duration / steps;
 
@@ -73,16 +74,16 @@ export default function RunpodStyleSlider() {
             className="space-y-8"
           >
             {/* Text Content */}
-            <div className="space-y-4">
+            <div className={`space-y-4 ${darkMode ? "text-white" : "text-gray-900"}`}>
               <h1 className="text-4xl font-bold">{item.title}</h1>
-              <p className="text-gray-300 text-lg">{item.description}</p>
+              <p className="text-lg">{item.description}</p>
             </div>
 
             {/* PROGRESS BAR */}
             <div className="space-y-2">
               <div className="w-full h-1 bg-gray-800 rounded-full overflow-hidden">
                 <motion.div
-                  className="h-full bg-gradient-to-r from-blue-500 to-blue-400"
+                  className="h-full bg-linear-to-r from-blue-500 to-blue-400"
                   initial={{ width: "0%" }}
                   animate={{ width: `${progress}%` }}
                   transition={{ type: "tween", duration: 0.1 }}
@@ -112,8 +113,8 @@ export default function RunpodStyleSlider() {
       {/* RIGHT SIDE - EITHER IMAGE OR GLOBE */}
       <div className="w-1/2 flex items-center justify-center h-[350px]">
         <AnimatePresence mode="wait">
-          {item.type === "globe" ? (
-            // GLOBE COMPONENT for "Detect changes across the globe."
+          {/* {item.type === "globe" ? ( */}
+            {/* // GLOBE COMPONENT for "Detect changes across the globe." */}
             <motion.div
               key="globe"
               className="relative w-full h-full flex items-center justify-center"
@@ -124,14 +125,19 @@ export default function RunpodStyleSlider() {
             >
               {/* Globe Component */}
               <div className="absolute inset-0 flex items-center justify-center">
+                {darkMode ? 
                 <Globee className="h-full w-full left-40" />
+                :
+                <GlobeeLight className="h-full w-full left-40" /> 
+              }
+                  
               </div>
 
               {/* Grid overlay */}
             </motion.div>
-          ) : (
-            // REGULAR IMAGE for other slides
-            <motion.img
+          {/* ) : ( */}
+            {/* // REGULAR IMAGE for other slides */}
+            {/* <motion.img
               key={item.img}
               src={item.img}
               alt="slide"
@@ -140,8 +146,8 @@ export default function RunpodStyleSlider() {
               animate={{ opacity: 1, x: 0, rotateY: 0 }}
               exit={{ opacity: 0, x: -50, rotateY: -90 }}
               transition={{ duration: 0.8 }}
-            />
-          )}
+            /> */}
+          {/* )} */}
         </AnimatePresence>
       </div>
     </div>

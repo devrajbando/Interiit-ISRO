@@ -92,8 +92,9 @@ export default function Chat() {
               }`}
             >
               <span>
-                Switch to{" "}
                 {mode === "interactive" ? "Evaluation" : "Interactive"}
+                {" "}
+                Mode
               </span>
               <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
             </button>
@@ -105,7 +106,7 @@ export default function Chat() {
       {mode === "interactive" ? (
         <PanelGroup
           direction="horizontal"
-          className="p-1 flex-1 h-screen w-screen flex min-h-[calc(100vh-88px)]"
+          className="p-1 flex-1 h-screen w-screen flex min-h-[calc(100vh-178px)] max-h-[calc(100vh-178px)]"
         >
           <Panel defaultSize={20} minSize={20} className="rounded-2xl">
             <ChatLeft />

@@ -10,25 +10,13 @@ const GLOBE_CONFIG = {
   devicePixelRatio: 2,
   phi: 0,
   theta: 0.3,
-
-  // reduce darkness so land dots stay visible
-  dark: 0.08,
-
-  // balanced shading
-  diffuse: 0.55,
-
-  // brighten the texture slightly for visibility
+  dark: 0,
+  diffuse: 0.4,
   mapSamples: 16000,
-  mapBrightness: 1.05,
-
-  // improved dark blue-gray tone
-  baseColor: [0.14, 0.22, 0.42],
-
-  // subtle matching glow
-  glowColor: [0.08, 0.12, 0.20],
-
+  mapBrightness: 1.2,
+  baseColor: [1, 1, 1],
   markerColor: [251 / 255, 100 / 255, 21 / 255],
-
+  glowColor: [1, 1, 1],
   markers: [
     { location: [14.5995, 120.9842], size: 0.03 },
     { location: [19.076, 72.8777], size: 0.1 },
@@ -41,11 +29,9 @@ const GLOBE_CONFIG = {
     { location: [34.6937, 135.5022], size: 0.05 },
     { location: [41.0082, 28.9784], size: 0.06 },
   ],
-};
+}
 
-
-
-export function Globee({ className, config = GLOBE_CONFIG }) {
+export function GlobeeLight({ className, config = GLOBE_CONFIG }) {
   let phi = 0
   let width = 0
 
