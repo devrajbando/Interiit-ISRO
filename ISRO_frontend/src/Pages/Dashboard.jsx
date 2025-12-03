@@ -5,8 +5,9 @@ import {
   Trash2,
   Calendar,
   Satellite,
-  ClockFading,
+  ExternalLink
 } from "lucide-react";
+import { AlertDialog, AlertDialogAction, AlertDialogDescription, AlertDialogCancel, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger, } from "../Components/ui/alert-dialog.jsx"
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "../Context/theme/Themecontext";
 import { sessioncontext } from "../Context/session/sessioncontext.jsx";
@@ -324,21 +325,43 @@ const Dashboard = () => {
                         ? "bg-gray-800 border border-gray-700 hover:border-orange-500/40 hover:shadow-lg hover:shadow-orange-500/10"
                         : "bg-white border border-gray-200 hover:border-orange-300 hover:shadow-lg"
                     } shadow-sm hover:shadow-xl hover:-translate-y-1`}
-                    onClick={() => handleChatClick(session)}
+                    
                   >
                     {/* CARD HEADER */}
                     <div className="flex items-start justify-between mb-6">
-                      {/* DELETE BUTTON */}
+                      {/* Open ChaT */}
                       <button
-                        onClick={(e) => handleDelete(session.sessionId, e)}
-                        className={`opacity-0 group-hover:opacity-100 p-2 rounded-lg transition-all ${
-                          darkMode
-                            ? "hover:bg-red-900/30 text-red-400"
-                            : "hover:bg-red-50 text-red-500"
-                        }`}
-                      >
-                        <Trash2 className="w-5 h-5" />
-                      </button>
+          type="button"
+          onClick={() => handleChatClick(session)}
+          className={`px-4 py-2 text-sm  cursor-pointer transition-all rounded-xl shadow-md hover:shadow-lg font-semibold flex items-center gap-2 transform hover:scale-105 active:scale-95 ${
+            darkMode 
+              ? 'bg-orange-600/20 text-orange-400 hover:bg-orange-600/30 border border-orange-600/30' 
+              : 'bg-orange-100 text-orange-700 hover:bg-orange-200 border border-orange-200'
+          }`}
+        >
+          <ExternalLink className="w-4 h-4" />
+          Open
+        </button>
+                      {/* DELETE BUTTON */}
+                        <AlertDialog>
+                            <AlertDialogTrigger className={`opacity-0 group-hover:opacity-100 p-2 rounded-lg transition-all shrink-0 ${
+                             darkMode 
+                              ? 'hover:bg-red-900/30 text-red-400 hover:text-red-300' 
+                               : 'hover:bg-red-50 text-red-500 hover:text-red-600'
+                                  }`}>
+                        <Trash2 className="w-4 h-4" />
+                        </AlertDialogTrigger>
+                    <AlertDialogContent className="bg-gray-900 borderborder-gray-700 shadow-xl rounded-xl ring-2ring-orange-500/20">
+                        <AlertDialogHeader>
+                          <AlertDialogTitle className="text-gray-200">Are you sure you want to delete this session?</AlertDialogTitle>
+                          <AlertDialogDescription>This action cannot be undone.</AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogAction className="bg-red-500/70 hover:bg-red-500/90" onClick={(e) => handleDelete( session.sessionId,e)}>Delete</AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
                     </div>
 
                     {/* TITLE */}
