@@ -11,7 +11,7 @@ function StarField() {
         <div
           key={i}
           className={`absolute w-1 h-1 rounded-full
-          ${darkMode ? 'bg-white' : 'bg-gray-900'}
+          ${darkMode ? 'bg-white' : 'bg-yellow-600'}
              `}
             
           style={{
