@@ -1,5 +1,5 @@
 "use client";
-import { LayoutTextFlip } from "../components/ui/layout-text-flip";
+import { LayoutTextFlip } from "./ui/layout-text-flip";
 import { motion } from "motion/react";
 
 export function LayoutTextFlipDemo() {
