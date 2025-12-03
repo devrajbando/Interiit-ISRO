@@ -1,16 +1,7 @@
 import React, { useState, useEffect } from "react";
 import {
-  Info,
-  MessageSquare,
-  Plus,
   Rocket,
-  Satellite,
-  Globe,
   Sparkles,
-  ChevronDown,
-  Zap,
-  Shield,
-  Database,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import StarField from "../Components/ui/StarField.jsx";
@@ -31,15 +22,7 @@ function Home() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const FloatingElement = ({ children, delay = 0, duration = 0 }) => (
-    <div
-      style={{
-        animation: ` ${duration}s ease-in-out ${delay}s infinite`,
-      }}
-    >
-      {children}
-    </div>
-  );
+  
 
   return (
     <>
@@ -128,148 +111,7 @@ function Home() {
         </section>
         {/* Features Section */}
         <StyleSlider />
-        <section
-          className={`relative py-20 px-6 ${
-            darkMode ? "bg-gray-900/50" : "bg-white/50"
-          } backdrop-blur-sm`}
-        >
-          <div className="z-1">
-            <div className="text-center mb-16">
-              <h2
-                className={`text-4xl md:text-5xl font-bold mb-4 ${
-                  darkMode ? "text-white" : "text-gray-900"
-                }`}
-              >
-                Mission-Ready Features
-              </h2>
-              <p
-                className={`text-xl ${
-                  darkMode ? "text-gray-400" : "text-gray-600"
-                }`}
-              >
-                Built to Simplify Access to Earth Observation Data
-              </p>
-            </div>
-
-            {/* <div className=""> */}
-                  <AnimatedList className="grid md:grid-cols-3 gap-8">
-              {/* Feature 1 */}
-              <FloatingElement delay={0}>
-                <div
-                  className={`group p-8 rounded-3xl transition-all duration-300 ${
-                    darkMode
-                      ? "bg-linear-to-br from-gray-800 to-gray-900 hover:from-blue-900/50 hover:to-gray-900"
-                      : "bg-linear-to-br from-white to-gray-50 hover:from-blue-50 hover:to-white"
-                  } border-2 ${
-                    darkMode
-                      ? "border-gray-700 hover:border-blue-500"
-                      : "border-gray-200 hover:border-blue-300"
-                  } shadow-xl transform hover:scale-105 hover:-translate-y-2`}
-                >
-                  <div
-                    className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-6 ${
-                      darkMode ? "bg-blue-600" : "bg-blue-500"
-                    } shadow-lg group-hover:shadow-2xl transition-shadow`}
-                  >
-                    <Info className="w-8 h-8 text-white" />
-                  </div>
-                  <h3
-                    className={`text-2xl font-bold mb-4 ${
-                      darkMode ? "text-white" : "text-gray-900"
-                    }`}
-                  >
-                    Precise Satellite Captioning
-                  </h3>
-                  <p
-                    className={`${
-                      darkMode ? "text-gray-400" : "text-gray-600"
-                    } leading-relaxed`}
-                  >
-                    Get a concise, accurate description summarizing the local
-                    and global attributes of small and large objects in the
-                    satellite image.
-                  </p>
-                </div>
-              </FloatingElement>
-
-              {/* Feature 2 */}
-              <FloatingElement delay={0.2} duration={3.5}>
-                <div
-                  className={`group p-8 rounded-3xl transition-all duration-300 ${
-                    darkMode
-                      ? "bg-linear-to-br from-gray-800 to-gray-900 hover:from-purple-900/50 hover:to-gray-900"
-                      : "bg-linear-to-br from-white to-gray-50 hover:from-purple-50 hover:to-white"
-                  } border-2 ${
-                    darkMode
-                      ? "border-gray-700 hover:border-purple-500"
-                      : "border-gray-200 hover:border-purple-300"
-                  } shadow-xl transform hover:scale-105 hover:-translate-y-2`}
-                >
-                  <div
-                    className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-6 ${
-                      darkMode ? "bg-purple-600" : "bg-purple-500"
-                    } shadow-lg group-hover:shadow-2xl transition-shadow`}
-                  >
-                    <Globe className="w-8 h-8 text-white" />
-                  </div>
-                  <h3
-                    className={`text-2xl font-bold mb-4 ${
-                      darkMode ? "text-white" : "text-gray-900"
-                    }`}
-                  >
-                    Visual Object Grounding
-                  </h3>
-                  <p
-                    className={`${
-                      darkMode ? "text-gray-400" : "text-gray-600"
-                    } leading-relaxed`}
-                  >
-                    Accurately localize objects based on a query. Enhance detection reliability by maintaining consistent precision even under dynamic or noisy input conditions.
-                  </p>
-                </div>
-              </FloatingElement>
-
-              {/* Feature 3 */}
-              <FloatingElement delay={0.4} duration={4}>
-                <div
-                  className={`group p-8 rounded-3xl transition-all duration-300 ${
-                    darkMode
-                      ? "bg-linear-to-br from-gray-800 to-gray-900 hover:from-pink-900/50 hover:to-gray-900"
-                      : "bg-linear-to-br from-white to-gray-50 hover:from-pink-50 hover:to-white"
-                  } border-2 ${
-                    darkMode
-                      ? "border-gray-700 hover:border-pink-500"
-                      : "border-gray-200 hover:border-pink-300"
-                  } shadow-xl transform hover:scale-105 hover:-translate-y-2`}
-                >
-                  <div
-                    className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-6 ${
-                      darkMode ? "bg-pink-600" : "bg-pink-500"
-                    } shadow-lg group-hover:shadow-2xl transition-shadow`}
-                  >
-                    <MessageSquare className="w-8 h-8 text-white" />
-                  </div>
-                  <h3
-                    className={`text-2xl font-bold mb-4 ${
-                      darkMode ? "text-white" : "text-gray-900"
-                    }`}
-                  >
-                    Geospatial Visual Question Answering (VQA)
-                  </h3>
-                  <p
-                    className={`${
-                      darkMode ? "text-gray-400" : "text-gray-600"
-                    } leading-relaxed`}
-                  >
-                    Provide accurate answers to binary, numeric, and semantic
-                    queries about the image
-                  </p>
-                </div>
-              </FloatingElement>
-          </AnimatedList>
-            {/* </div> */}
-          </div>
-        </section>
+     
       </div>
     </>
   );
