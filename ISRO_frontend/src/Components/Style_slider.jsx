@@ -4,6 +4,7 @@ import { Globee } from "../Components/ui/globe";
 import { GlobeeLight } from "../Components/ui/globe-light";
 import { useTheme } from "../Context/theme/Themecontext.jsx";
 import { HeroHighlightDemo } from "./HeroHighlightDemo";
+import { Info, Globe, MessageSquare } from "lucide-react";
 const ITEMS = [
   {
     title: "Analyze satellite imagery in seconds.",
@@ -11,8 +12,6 @@ const ITEMS = [
     hitext: "in seconds ",
     description:
       "Upload high-resolution satellite images with zero pixel loss, or provide structured JSON inputs. Get instant AI-powered insights including object detection, terrain features, and semantic segmentation.",
-    img: "https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?q=80&w=2071&auto=format&fit=crop",
-    type: "image",
   },
   {
     title: "Detect changes across the globe.",
@@ -20,7 +19,7 @@ const ITEMS = [
     hitext: "across the globe ",
     description:
       "Track urban expansion, deforestation, natural disasters, and infrastructure development with automated temporal analysis.",
-    type: "globe",
+    
   },
   {
     title: "Natural language interface for satellite data.",
@@ -28,8 +27,33 @@ const ITEMS = [
     hitext: " natural language ",
     description:
       "Ask questions in plain English — 'Find all airports in this region', 'Locate water bodies', 'Count vehicles' — and get precise AI-driven results.",
-    img: "https://images.unsplash.com/photo-1502134249126-9f3755a50d78?q=80&w=2070&auto=format&fit=crop",
-    type: "image",
+  },
+];
+
+const FEATURES = (darkMode) => [
+  {
+    iconBg: darkMode ? "bg-blue-600" : "bg-blue-500",
+    icon: <Info className="w-8 h-8 text-white" />,
+    title: "Precise Satellite Captioning",
+    text: "Get a concise, accurate description summarizing the local and global attributes of small and large objects in the satellite image.",
+    hoverFrom: darkMode ? "from-blue-900/50" : "from-blue-50",
+    borderHover: darkMode ? "hover:border-blue-500" : "hover:border-blue-300",
+  },
+  {
+    iconBg: darkMode ? "bg-purple-600" : "bg-purple-500",
+    icon: <Globe className="w-8 h-8 text-white" />,
+    title: "Visual Object Grounding",
+    text: "Accurately localize objects based on a query. Enhance detection reliability by maintaining consistent precision even under dynamic or noisy input conditions.",
+    hoverFrom: darkMode ? "from-purple-900/50" : "from-purple-50",
+    borderHover: darkMode ? "hover:border-purple-500" : "hover:border-purple-300",
+  },
+  {
+    iconBg: darkMode ? "bg-pink-600" : "bg-pink-500",
+    icon: <MessageSquare className="w-8 h-8 text-white" />,
+    title: "Geospatial Visual Question Answering (VQA)",
+    text: "Provide accurate answers to binary, numeric, and semantic queries about the image.",
+    hoverFrom: darkMode ? "from-pink-900/50" : "from-pink-50",
+    borderHover: darkMode ? "hover:border-pink-500" : "hover:border-pink-300",
   },
 ];
 
@@ -38,6 +62,17 @@ export default function RunpodStyleSlider() {
   const [progress, setProgress] = useState(0);
   const intervalRef = useRef(null);
   const { darkMode } = useTheme();
+
+  const FloatingElement = ({ children, delay = 0, duration = 0 }) => (
+    <div
+      style={{
+        animation: ` ${duration}s ease-in-out ${delay}s infinite`,
+      }}
+    >
+      {children}
+    </div>
+  );
+
   // Auto‑slide with progress bar
   useEffect(() => {
     setProgress(0);
@@ -70,58 +105,91 @@ export default function RunpodStyleSlider() {
   return (
     <div className="w-full flex items-center justify-between py-20 px-20 text-white overflow-hidden">
       {/* LEFT TEXT WITH PROGRESS BAR */}
-      <div className="w-1/2 pr-10">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={item.title}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.6 }}
-            className="space-y-8"
-          >
-            {/* Text Content */}
+      {/* LEFT SIDE — Now only ONE feature is shown at a time */}
+<div className="w-1/2 pr-10">
+  <AnimatePresence mode="wait">
+    <motion.div
+      key={index}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
+      transition={{ duration: 0.6 }}
+      className="space-y-8"
+    >
+      {/* Get current feature */}
+      {(() => {
+        const f = FEATURES(darkMode)[index];
+
+        return (
+          <FloatingElement delay={0} duration={3}>
             <div
-              className={`space-y-4 ${
-                darkMode ? "text-white" : "text-gray-900"
-              }`}
+              className={`group p-8 rounded-3xl transition-all duration-300
+                ${darkMode 
+                  ? `bg-linear-to-br from-gray-800 to-gray-900 hover:${f.hoverFrom} hover:to-gray-900`
+                  : `bg-linear-to-br from-white to-gray-50 hover:${f.hoverFrom} hover:to-white`
+                } 
+                border-2 ${
+                  darkMode ? "border-gray-700" : "border-gray-200"
+                } ${f.borderHover}
+                shadow-xl transform hover:scale-105 hover:-translate-y-2`}
             >
-              <h1 className="text-4xl font-bold">
-                <HeroHighlightDemo text={item.text} hightext={item.hitext} />
-              </h1>
-              <p className="text-lg">{item.description}</p>
-            </div>
-
-            {/* PROGRESS BAR */}
-            <div className="space-y-2">
-              <div className="w-full h-1 bg-gray-800 rounded-full overflow-hidden">
-                <motion.div
-                  className="h-full bg-linear-to-r from-blue-500 to-blue-400"
-                  initial={{ width: "0%" }}
-                  animate={{ width: `${progress}%` }}
-                  transition={{ type: "tween", duration: 0.1 }}
-                />
+              <div
+                className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-6 
+                  ${f.iconBg} shadow-lg group-hover:shadow-2xl transition-shadow`}
+              >
+                {f.icon}
               </div>
 
-              {/* Dots for Slide Indication */}
-              <div className="flex items-center gap-2">
-                {ITEMS.map((_, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setIndex(i)}
-                    className={`w-2 h-2 rounded-full transition-all ${
-                      i === index
-                        ? "bg-blue-500 scale-125"
-                        : "bg-gray-600 hover:bg-gray-500"
-                    }`}
-                    aria-label={`Go to slide ${i + 1}`}
-                  />
-                ))}
-              </div>
+              <h3
+                className={`text-2xl font-bold mb-4 ${
+                  darkMode ? "text-white" : "text-gray-900"
+                }`}
+              >
+                {f.title}
+              </h3>
+
+              <p
+                className={`leading-relaxed ${
+                  darkMode ? "text-gray-400" : "text-gray-600"
+                }`}
+              >
+                {f.text}
+              </p>
             </div>
-          </motion.div>
-        </AnimatePresence>
+          </FloatingElement>
+        );
+      })()}
+
+      {/* Progress Bar + Dots stay the same */}
+    </motion.div>
+  </AnimatePresence>
+      <div className="space-y-2 my-4">
+        <div className="w-full h-1 bg-gray-800 rounded-full overflow-hidden">
+          <motion.div
+            className="h-full bg-linear-to-r from-blue-500 to-blue-400"
+            initial={{ width: "0%" }}
+            animate={{ width: `${progress}%` }}
+            transition={{ type: "tween", duration: 0 }}
+          />
+        </div>
+ 
+        <div className="flex items-center gap-2">
+          {FEATURES(darkMode).map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setIndex(i)}
+              className={`w-2 h-2 rounded-full transition-all 
+                ${
+                  i === index
+                    ? "bg-blue-500 scale-125"
+                    : "bg-gray-600 hover:bg-gray-500"
+                }`}
+            />
+          ))}
+        </div>
       </div>
+</div>
+
 
       {/* RIGHT SIDE - EITHER IMAGE OR GLOBE */}
       <div className="w-1/2 flex items-center justify-center h-[350px]">
