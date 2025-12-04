@@ -1,12 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import {
-  Plus,Brain,
-  Search,
-  Trash2,
-  Calendar,
-  Satellite,
-  ExternalLink
-} from "lucide-react";
+import {Brain,Search,Trash2,Calendar,Satellite,ExternalLink} from "lucide-react";
 import { AlertDialog, AlertDialogAction, AlertDialogDescription, AlertDialogCancel, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger, } from "../Components/ui/alert-dialog.jsx"
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "../Context/theme/Themecontext";
@@ -15,8 +8,7 @@ import { sessioncontext } from "../Context/session/sessioncontext.jsx";
 const Dashboard = () => {
   const navigate = useNavigate();
   const { sessions, setSessions, activeSessionId, setActiveSessionId } =
-    useContext(sessioncontext);
-
+  useContext(sessioncontext);
   const { darkMode } = useTheme();
 
   // State for search and filter
@@ -41,13 +33,10 @@ const Dashboard = () => {
   // Function to handle delete
   const handleDelete = (sessionId, e) => {
     e.stopPropagation();
-    // Remove session from the sessions array
     const updatedSessions = sessions.filter(
       (session) => session.sessionId !== sessionId
     );
     setSessions(updatedSessions);
-
-    // If we're deleting the active session, clear activeSessionId
     if (activeSessionId === sessionId) {
       setActiveSessionId(null);
     }
@@ -75,12 +64,10 @@ const Dashboard = () => {
     // Category filter
     const matchesCategory =
       selectedCategory === "All Categories" ||
-      (session.tags && session.tags.includes(selectedCategory));
-
+      (session.tags && session.tags.includes(selectedCategory))
     return matchesSearch && matchesCategory;
   });
-  console.log("aefoin")
-  console.log(filteredSessions);
+  
   // Extract tags from session
   const getSessionTags = (session) => {
     if (session.tags && Array.isArray(session.tags)) {
@@ -202,8 +189,7 @@ const Dashboard = () => {
     <div
       className={`relative min-h-screen transition-colors duration-500 ${
         darkMode ? "bg-gray-900" : "bg-gray-100"
-      }`}
-    >
+      }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* HEADER */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
@@ -233,10 +219,9 @@ const Dashboard = () => {
               darkMode
                 ? "bg-orange-600/20 text-orange-400 hover:bg-orange-600/30 border border-orange-600/30"
                 : "bg-orange-100 text-orange-700 hover:bg-orange-200 border border-orange-200"
-            }`}
-          >
+            }`} >
             <Brain className="w-5 h-5" />
-            <span>Analyse</span>
+            <span>New Chat</span>
           </button>
         </div>
 
@@ -299,10 +284,10 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* GRID OF ANALYSIS CARDS OR SKELETONS */}
+        {/* Grid of past Chats */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {loading
-            ? // Show 6 skeleton loaders
+            ? // Show the skeleton loaders
               Array.from({ length: sessions?.length }).map((_, index) => (
                 <SkeletonCard key={`skeleton-${index}`} />
               ))
@@ -316,7 +301,6 @@ const Dashboard = () => {
                   session.messages?.[0]?.content||
                   session.draftText ||
                   "No messages yet";
-                  console.log("sdoinv"+preview);
                 return (
                   <div
                     key={session.sessionId}
@@ -329,16 +313,16 @@ const Dashboard = () => {
                   >
                     {/* CARD HEADER */}
                     <div className="flex items-start justify-between mb-6">
-                      {/* Open ChaT */}
+                      {/* Open Chat */}
                       <button
-          type="button"
-          onClick={() => handleChatClick(session)}
-          className={`px-4 py-2 text-sm  cursor-pointer transition-all rounded-xl shadow-md hover:shadow-lg font-semibold flex items-center gap-2 transform hover:scale-105 active:scale-95 ${
-            darkMode 
-              ? 'bg-orange-600/20 text-orange-400 hover:bg-orange-600/30 border border-orange-600/30' 
-              : 'bg-orange-100 text-orange-700 hover:bg-orange-200 border border-orange-200'
-          }`}
-        >
+                        type="button"
+                        onClick={() => handleChatClick(session)}
+                        className={`px-4 py-2 text-sm  cursor-pointer transition-all rounded-xl shadow-md hover:shadow-lg font-semibold flex items-center gap-2 transform hover:scale-105 active:scale-95 ${
+                          darkMode 
+                            ? 'bg-orange-600/20 text-orange-400 hover:bg-orange-600/30 border border-orange-600/30' 
+                            : 'bg-orange-100 text-orange-700 hover:bg-orange-200 border border-orange-200'
+                        }`}
+                      >
           <ExternalLink className="w-4 h-4" />
           Open
         </button>

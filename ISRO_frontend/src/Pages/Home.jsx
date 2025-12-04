@@ -4,12 +4,9 @@ import {
   Sparkles,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import StarField from "../Components/ui/StarField.jsx";
-import { TypingAnimation } from "../Components/ui/typing-animation.jsx";
 import { useTheme } from "../Context/theme/Themecontext";
 import TextType from "../Components/ui/TextType.jsx";
 import StyleSlider from "../Components/Style_slider.jsx";
-import { AnimatedList, AnimatedListItem } from "../Components/ui/animated-list.jsx";
 import { LayoutTextFlipDemo } from "../Components/LayoutTextFlipDemo.jsx";
 function Home() {
   const navigate = useNavigate();
@@ -23,36 +20,23 @@ function Home() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  
-
   return (
     <>
       <div
-        className={`flex flex-col z-1
-    min-h-screen
-    h-auto
-    overflow-y-auto
-    scrollbar-hide transition-colors duration-500  ${
-      darkMode ? "bg-gray-900" : "bg-gray-300"
-    }`}
-      >
+        className={`flex flex-col z-1 min-h-screen h-auto overflow-y-auto scrollbar-hide transition-colors duration-500  ${
+                      darkMode ? "bg-gray-900" : "bg-gray-300"}`}>
+
         {/* Hero Section */}
         <section className="relative min-h-screen flex items-center justify-center overflow-visible px-6 ">
-          {/* <StarField /> */}
           <div className="relative z-10 max-w-5xl w-full text-center space-y-8">
             {/* Main Heading */}
-            <div
-              className={`space-y-6 ${
-                isVisible ? "animate-fadeInUp" : "opacity-0"
-              }`}
-            >
+            <div className={`space-y-6 ${isVisible ? "animate-fadeInUp" : "opacity-0" }`}>
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-600/20 backdrop-blur-sm border border-blue-500/30">
                 <Sparkles className="w-4 h-4 text-blue-400" />
                 <span
                   className={`text-sm font-medium ${
                     darkMode ? "text-blue-300" : "text-blue-700"
-                  }`}
-                >
+                  }`} >
                   Built for the Inter IIT Tech Meet 14.0
                 </span>
               </div>
@@ -64,9 +48,6 @@ function Home() {
               >
                 <LayoutTextFlipDemo/>
                 <span className="block mt-2 text-orange-500">
-                  {/* <TypingAnimation>
-                a Thousand Words
-            </TypingAnimation> */}
                   <TextType
                     text={"a Thousand Words"}
                     typingSpeed={100}
@@ -77,7 +58,6 @@ function Home() {
                   />
                 </span>
               </h1>
-
               <p
                 className={`text-xl md:text-2xl max-w-3xl mx-auto ${
                   darkMode ? "text-gray-300" : "text-gray-600"
@@ -87,19 +67,16 @@ function Home() {
               </p>
             </div>
 
-            {/* CTA Buttons */}
+            {/* Get started button */}
             <div
               className={`flex flex-col sm:flex-row items-center justify-center gap-4 ${
                 isVisible ? "animate-fadeInUp" : "opacity-0"
               }`}
-              style={{ animationDelay: "0.2s" }}
-            >
+              style={{ animationDelay: "0.2s" }}>
               <button
                 onClick={() => navigate("/dashboard")}
                 className={`group relative px-8 py-4 text-lg font-semibold rounded-full transition-all duration-300 bg-blue-700 hover:bg-orange-700
-           text-white shadow-lg hover:shadow-2xl transform hover:scale-105  cursor-pointer
-          
-             `}
+                          text-white shadow-lg hover:shadow-2xl transform hover:scale-105  cursor-pointer`}
               >
                 <span className="flex items-center gap-2">
                   <Rocket className="w-5 h-5" />
@@ -110,6 +87,7 @@ function Home() {
             </div>
           </div>
         </section>
+
         {/* Features Section */}
         <StyleSlider />
      

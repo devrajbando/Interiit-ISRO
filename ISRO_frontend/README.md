@@ -1,6 +1,6 @@
 # GeoNLI - Satellite Image Intelligence Platform
 
-**Built for Inter IIT Tech Meet 14.0**
+**Built for Inter IIT Tech Meet 14.0- Team_24**
 
 A modern web application that enables natural language interaction with satellite imagery using AI-powered analysis. Ask questions about satellite images like you're chatting with an expert.
 
