@@ -34,8 +34,8 @@ const ChatEvalMode = () => {
   }
 }
   `);
-    const [copied, setCopied] = useState(false);
-  const {darkMode, toggleTheme} = useTheme();
+  const [copied, setCopied] = useState(false);
+  const {darkMode} = useTheme();
   const [jsonOutput, setJsonOutput] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
   const [executionTime, setExecutionTime] = useState(null);
@@ -241,7 +241,7 @@ const ChatEvalMode = () => {
             <div className={`rounded-2xl border-2 ${
               darkMode ? 'bg-gray-800 border-gray-700' : 'bg-gray-200 border-gray-200'
             } shadow-xl overflow-hidden flex flex-col flex-1`}>
-              <div className={`px-6 py-4 border-b flex items-center justify-between flex-shrink-0 ${
+              <div className={`px-6 py-4 border-b flex items-center justify-between shrink-0 ${
                 darkMode ? 'border-gray-700 bg-gray-800/50' : 'border-gray-200 bg-gray-50'
               }`}>
                 <div className="flex items-center gap-3">
@@ -260,7 +260,7 @@ const ChatEvalMode = () => {
                   </div>
                 </div>
 
-                <label className={`flex items-center gap-2 px-4 py-2 rounded-lg cursor-pointer transition-all flex-shrink-0 ${
+                <label className={`flex items-center gap-2 px-4 py-2 rounded-lg cursor-pointer transition-all shrink-0 ${
                   darkMode 
                     ? 'bg-gray-700 hover:bg-gray-600 text-white' 
                     : 'bg-gray-100 hover:bg-gray-200 text-gray-900'
@@ -289,7 +289,7 @@ const ChatEvalMode = () => {
                 />
               </div>
 
-              <div className={`px-6 py-4 border-t flex-shrink-0 ${
+              <div className={`px-6 py-4 border-t shrink-0 ${
                 darkMode ? 'border-gray-700' : 'border-gray-200'
               }`}>
                 <button
@@ -325,11 +325,11 @@ const ChatEvalMode = () => {
             <div className={`rounded-2xl border-2 ${
               darkMode ? 'bg-gray-800 border-gray-700' : 'bg-gray-200 border-gray-200'
             } shadow-xl overflow-hidden flex flex-col flex-1`}>
-              <div className={`px-6 py-4 border-b flex items-center justify-between flex-shrink-0 ${
+              <div className={`px-6 py-4 border-b flex items-center justify-between shrink-0 ${
                 darkMode ? 'border-gray-700 bg-gray-800/50' : 'border-gray-200 bg-gray-50'
               }`}>
                 <div className="flex items-center gap-3 min-w-0">
-                  <div className={`p-2 rounded-lg flex-shrink-0 ${
+                  <div className={`p-2 rounded-lg shrink-0 ${
                     darkMode ? 'bg-blue-600/20' : 'bg-blue-100'
                   }`}>
                     <FileJson className={`w-5 h-5 ${darkMode ? 'text-blue-400' : 'text-blue-600'}`} />
@@ -364,7 +364,7 @@ const ChatEvalMode = () => {
                 </div>
 
                 {jsonOutput && (
-                  <div className="flex gap-2 flex-shrink-0">
+                  <div className="flex gap-2 shrink-0">
                     <button
                       onClick={copyToClipboard}
                       className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all whitespace-nowrap ${
@@ -420,7 +420,6 @@ const ChatEvalMode = () => {
       </div>
     </div>
   );
-// ...existing code...
 };
 
 export default ChatEvalMode;

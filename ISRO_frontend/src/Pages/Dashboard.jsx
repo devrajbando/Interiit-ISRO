@@ -34,6 +34,7 @@ const Dashboard = () => {
 
   // Function to handle chat click - navigate to chat with sessionId
   const handleChatClick = (sessionId) => {
+    console.log("rojbg")
     setActiveSessionId(sessionId);
     navigate(`/chat`);
   };

@@ -1,4 +1,4 @@
-// App.jsx
+import React from "react";
 import Navbar from "./Components/Navbar";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./Pages/Home.jsx";
@@ -7,7 +7,7 @@ import Dashboard from "./Pages/Dashboard.jsx";
 import Footer from "./Components/Footer.jsx";
 import Themeprovider from "./Context/theme/Themeprovider.jsx";
 import StarField from "./Components/ui/StarField";
-import ErrorPage from "../src/Components/Error.jsx"; // <--- ADD THIS
+import ErrorPage from "../src/Components/Error.jsx"; 
 
 export default function App() {
   return (
