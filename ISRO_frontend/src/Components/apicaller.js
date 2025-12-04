@@ -28,7 +28,10 @@ const handlemodelresponse = async (queryType,prompt, input_image, image_url) => 
     
 
     const body = {
-      input_image: inputPayload,
+      input_image: {
+        image_id: image_id,
+        image_url: imageURL,
+      },
       queries: {
         caption_query: {
           instruction: queryType === "Captioning" ? prompt : null,

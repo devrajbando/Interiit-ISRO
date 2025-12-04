@@ -7,7 +7,6 @@ import ChatEvalMode from "./ChatEvalMode.jsx";
 import ChatEvalModeee from "./Chateval2.jsx";
 import { useTheme } from "../Context/theme/Themecontext";
 import { Zap, BarChart3, ChevronRight } from "lucide-react";
-
 export default function Chat() {
   const [mode, setMode] = useState("interactive");
   const { darkMode } = useTheme();
@@ -95,9 +94,7 @@ export default function Chat() {
               }`}
             >
               <span>
-                {mode === "interactive" ? "Evaluation" : "Interactive"}
-                {" "}
-                Mode
+                {mode === "interactive" ? "Evaluation" : "Interactive"} Mode
               </span>
               <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
             </button>
@@ -109,7 +106,7 @@ export default function Chat() {
       {mode === "interactive" ? (
         <PanelGroup
           direction="horizontal"
-          className="p-1 flex-1 h-screen w-screen flex min-h-[calc(100vh-178px)] max-h-[calc(100vh-178px)]"
+          className="p-1 flex-1 h-screen w-screen flex min-h-[calc(100vh-70px)] max-h-[calc(100vh-178px)]"
         >
          <Panel 
             defaultSize={20} 

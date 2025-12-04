@@ -21,6 +21,7 @@ export default function Chatright({ setBoundingBoxes }) {
     useContext(sessioncontext);
 const [queryType, setQueryType] = useState("Captioning");
   const [message, setMessage] = useState("");
+  const textareaRef = useRef(null);
   const [aiLoading, setAiLoading] = useState(false);
 
   const scrollContainerRef = useRef(null);
@@ -40,7 +41,7 @@ const [queryType, setQueryType] = useState("Captioning");
 
   const handleSend = async (e,message,queryType) => {
     try {
-      e.preventDefault();
+      if (e) e.preventDefault();
       if (!message.trim()) return;
       if (!activeSessionId) return alert("Select a chat first!");
       if (aiLoading) return;
@@ -130,6 +131,14 @@ const [queryType, setQueryType] = useState("Captioning");
       setAiLoading(false);
     }
   };
+
+  // Auto-expand textarea
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";
+      textareaRef.current.style.height = Math.min(textareaRef.current.scrollHeight, 160) + "px"; // max 160px
+    }
+  }, [message]);
 
   return (
     <div
@@ -344,13 +353,21 @@ const [queryType, setQueryType] = useState("Captioning");
             }`}
           >
             <form onSubmit={handleSend} className="flex gap-3">
-              <input
-                type="text"
+              <textarea
+                ref={textareaRef}
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !e.shiftKey) {
+                    e.preventDefault();
+                    handleSend();
+                  }
+                }}
                 placeholder="Ask a question about the image..."
                 disabled={aiLoading}
-                className={`flex-1 px-4 py-3 rounded-xl border-2 outline-none transition-all ${
+                rows={1}
+                style={{ resize: "none", maxHeight: 160 }}
+                className={`flex-1 px-4 py-4 rounded-xl border-2 outline-none transition-all ${
                   darkMode
                     ? "bg-gray-900 border-gray-700 text-white placeholder-gray-500 focus:border-orange-500"
                     : "bg-white border-gray-300 text-gray-900 placeholder-gray-400 focus:border-orange-400"
@@ -359,7 +376,7 @@ const [queryType, setQueryType] = useState("Captioning");
               <button
                 type="submit"
                 disabled={aiLoading || !message.trim()}
-                className={`px-5 py-3 rounded-xl font-semibold transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 active:scale-95 flex items-center gap-2 ${
+                className={`px-5 py-3  rounded-xl font-semibold transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 active:scale-95 flex items-center gap-2 ${
                   darkMode
                     ? "bg-orange-600  hover:from-orange-700 hover:to-blue-700"
                     : "bg-orange-500  hover:from-orange-600 hover:to-blue-600"
