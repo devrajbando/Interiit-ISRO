@@ -16,6 +16,7 @@ const CAPTION_KEYWORDS = [
   "visualize",
   "depict",
   "what",
+  "tell"
 ];
 
 const GROUNDING_KEYWORDS = [
@@ -35,7 +36,6 @@ const GROUNDING_KEYWORDS = [
 ];
 
 const ATTRIBUTE_BINARY = [
-  "is",
   "exists",
   "present",
   "visible",
@@ -65,6 +65,7 @@ const ATTRIBUTE_NUMERIC = [
 
 const ATTRIBUTE_SEMANTIC = [
   "color",
+  "coordinate",
   "type",
   "material",
   "shape",
