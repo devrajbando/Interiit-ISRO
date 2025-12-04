@@ -4,24 +4,6 @@ import { Globee } from "../Components/ui/globe";
 import { GlobeeLight } from "../Components/ui/globe-light";
 import { useTheme } from "../Context/theme/Themecontext.jsx";
 import { Info, Globe, MessageSquare } from "lucide-react";
-const ITEMS = [
-  {
-    title: "Analyze satellite imagery in seconds.",
-    description:
-      "Upload high-resolution satellite images with zero pixel loss, or provide structured JSON inputs. Get instant AI-powered insights including object detection, terrain features, and semantic segmentation.",
-  },
-  {
-    title: "Detect changes across the globe.",
-    description:
-      "Track urban expansion, deforestation, natural disasters, and infrastructure development with automated temporal analysis.",
-    
-  },
-  {
-    title: "Natural language interface for satellite data.",
-    description:
-      "Ask questions in plain English — 'Find all airports in this region', 'Locate water bodies', 'Count vehicles' — and get precise AI-driven results.",
-  },
-];
 
 const FEATURES = (darkMode) => [
   {
@@ -84,7 +66,7 @@ export default function RunpodStyleSlider() {
       setProgress(newProgress);
 
       if (step >= steps) {
-        setIndex((prev) => (prev + 1) % ITEMS.length);
+        setIndex((prev) => (prev + 1) % 3);
       }
     }, stepTime);
 
@@ -93,12 +75,11 @@ export default function RunpodStyleSlider() {
     };
   }, [index]);
 
-  const item = ITEMS[index];
 
   return (
     <div className="w-full flex items-center justify-between py-20 px-20 text-white overflow-hidden">
       {/* LEFT TEXT WITH PROGRESS BAR */}
-      {/* LEFT SIDE — Now only ONE feature is shown at a time */}
+      
 <div className="w-1/2 pr-10">
   <AnimatePresence mode="wait">
     <motion.div
@@ -184,11 +165,10 @@ export default function RunpodStyleSlider() {
 </div>
 
 
-      {/* RIGHT SIDE - EITHER IMAGE OR GLOBE */}
+      {/* RIGHT SIDE - GLOBE */}
       <div className="w-1/2 flex items-center justify-center h-[350px]">
         <AnimatePresence mode="wait">
           {/* {item.type === "globe" ? ( */}
-            {/* // GLOBE COMPONENT for "Detect changes across the globe." */}
             <motion.div
               key="globe"
               className="relative w-full h-full flex items-center justify-center"
@@ -197,31 +177,14 @@ export default function RunpodStyleSlider() {
               exit={{ opacity: 0, x: -50, rotateY: -90 }}
               transition={{ duration: 0.8 }}
             >
-              {/* Globe Component */}
               <div className="absolute inset-0 flex items-center justify-center">
                 {darkMode ? 
                 <Globee className="h-full w-full left-40" />
                 :
                 <GlobeeLight className="h-full w-full left-40" /> 
-              }
-                  
+              }    
               </div>
-
-              {/* Grid overlay */}
             </motion.div>
-          {/* ) : ( */}
-            {/* // REGULAR IMAGE for other slides */}
-            {/* <motion.img
-              key={item.img}
-              src={item.img}
-              alt="slide"
-              className="rounded-xl shadow-xl object-cover h-full"
-              initial={{ opacity: 0, x: 50, rotateY: 90 }}
-              animate={{ opacity: 1, x: 0, rotateY: 0 }}
-              exit={{ opacity: 0, x: -50, rotateY: -90 }}
-              transition={{ duration: 0.8 }}
-            /> */}
-          {/* )} */}
         </AnimatePresence>
       </div>
     </div>
