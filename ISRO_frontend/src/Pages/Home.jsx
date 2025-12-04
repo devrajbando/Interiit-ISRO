@@ -6,6 +6,7 @@ import TextType from "../Components/ui/TextType.jsx";
 import StyleSlider from "../Components/Style_slider.jsx";
 import { LayoutTextFlipDemo } from "../Components/LayoutTextFlipDemo.jsx";
 import { motion } from "framer-motion";
+import { ShinyButton } from "../Components/ui/shiny-button";
 function Home() {
   const navigate = useNavigate();
   const [scrollY, setScrollY] = useState(0);
@@ -22,19 +23,25 @@ function Home() {
     <>
       <div
         className={`flex flex-col z-1 min-h-screen h-auto overflow-y-auto scrollbar-hide transition-colors duration-500  ${
-                      darkMode ? "bg-gray-900" : "bg-gray-300"}`}>
-
+          darkMode ? "bg-gray-900" : "bg-gray-300"
+        }`}
+      >
         {/* Hero Section */}
         <section className="relative min-h-screen flex items-center justify-center overflow-visible px-6 ">
           <div className="relative z-10 max-w-5xl w-full text-center space-y-8">
             {/* Main Heading */}
-            <div className={`space-y-6 ${isVisible ? "animate-fadeInUp" : "opacity-0" }`}>
+            <div
+              className={`space-y-6 ${
+                isVisible ? "animate-fadeInUp" : "opacity-0"
+              }`}
+            >
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-600/20 backdrop-blur-sm border border-blue-500/30">
                 <Sparkles className="w-4 h-4 text-blue-400" />
                 <span
                   className={`text-sm font-medium ${
                     darkMode ? "text-blue-300" : "text-blue-700"
-                  }`} >
+                  }`}
+                >
                   Built for the Inter IIT Tech Meet 14.0
                 </span>
               </div>
@@ -56,6 +63,8 @@ function Home() {
                   />
                 </span>
               </h1>
+
+              <ShinyButton>Shiny Button</ShinyButton>
               <p
                 className={`text-xl md:text-2xl max-w-3xl mx-auto ${
                   darkMode ? "text-gray-300" : "text-gray-600"
@@ -70,7 +79,8 @@ function Home() {
               className={`flex flex-col sm:flex-row items-center justify-center gap-4 ${
                 isVisible ? "animate-fadeInUp" : "opacity-0"
               }`}
-              style={{ animationDelay: "0.2s" }}>
+              style={{ animationDelay: "0.2s" }}
+            >
               <button
                 onClick={() => navigate("/dashboard")}
                 className={`group relative px-8 py-4 text-lg font-semibold rounded-full transition-all duration-300 bg-blue-700 hover:bg-orange-700

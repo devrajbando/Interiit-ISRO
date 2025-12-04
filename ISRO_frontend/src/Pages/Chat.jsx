@@ -120,7 +120,7 @@ export default function Chat() {
             } cursor-col-resize`}
           />
 
-          <Panel defaultSize={40} minSize={40} className="rounded-2xl">
+          <Panel defaultSize={40} minSize={20} className="rounded-2xl">
             <Chatmiddle />
           </Panel>
 
