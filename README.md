@@ -883,6 +883,8 @@ Frontend Structure:
 │  └─ Helper functions
 └─ assets
    └─ Static images/SVGs
+
+
 ```
 
 ---
@@ -1306,3 +1308,4 @@ curl -X POST http://localhost:3000/api/evaluation \
 **Version:** 1.0.0  
 **Status:** Active Development  
 **Maintained by:** Team_24
+
