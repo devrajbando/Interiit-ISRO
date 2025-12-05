@@ -11,13 +11,13 @@ const QueryTypeSelector = ({ selectedQueryType, onQueryTypeChange }) => {
     {
       category: 'Captioning',
       options: [
-        { id: 'Captioning', name: 'Captioning', icon: '◆' },
+        { id: 'Captioning', name: 'Captioning', icon: 'C' },
       ]
     },
     {
       category: 'Grounding',
       options: [
-        { id: 'Grounding', name: 'Grounding', icon: 'A' },
+        { id: 'Grounding', name: 'Grounding', icon: 'G' },
       ]
     },
     {

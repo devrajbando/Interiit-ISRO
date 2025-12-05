@@ -79,7 +79,7 @@ const handlemodelresponse = async (queryType,prompt, input_image, image_url) => 
           answer= "There is no object matching the description in this image."
         }
         else if(number==1){
-          answer= "There is only 1 in this image, I have marked it with a bounding box."
+          answer= "I have marked it with a bounding box in the image."
         }
         else
         {

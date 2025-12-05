@@ -150,9 +150,6 @@ const drawBoundingBoxes = () => {
 
     canvas.width = img.naturalWidth;
     canvas.height = img.naturalHeight;
-// const colors = ['#f97316', '#3b82f6', '#10b981', '#ef4444', '#8b5cf6'];
-    // Draw image
-    // ctx.drawImage(img, 0, 0);
  ctx.clearRect(0, 0, canvas.width, canvas.height);
     // Draw boxes
     boundingBoxes.forEach((box, idx) => {
@@ -178,8 +175,6 @@ const drawBoundingBoxes = () => {
         ctx.lineTo(x4, y4);
        ctx.closePath();
       ctx.save();
-     
-      ctx.fill();
       ctx.strokeStyle = color;
       ctx.lineWidth = 3;
        ctx.stroke()
