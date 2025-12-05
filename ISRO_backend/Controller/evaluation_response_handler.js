@@ -1,3 +1,4 @@
+import axios from "axios";
 const Evaluation_response_handler = async (req, res) => {
   try {
     // console.log("hi",req.body)
@@ -9,7 +10,7 @@ const Evaluation_response_handler = async (req, res) => {
         error: "Missing 'input' in request body",
       });
     }
-
+    console.log(input)
     // Validate ML_MODEL_ENDPOINT is configured
     const MODEL_URL = process.env.ML_MODEL_ENDPOINT;
     if (!MODEL_URL) {
@@ -25,18 +26,30 @@ const Evaluation_response_handler = async (req, res) => {
 
 
     // Make API call with timeout
-    const response = await fetch(`${MODEL_URL}`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-      },
-      body: JSON.stringify(input),
-    });
-    
+    // const response = await fetch(`${MODEL_URL}`, {
+    //     method: "POST",
+    //     timeout: 180000, // 3 minutes
+    //     headers: {
+    //         "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify(input),
+    // });
+    console.log("Sending to ML model");
+    const response = await axios.post(
+  MODEL_URL,
+  input,
+  {
+    timeout: 180000, // 3 minutes
+    headers: {
+      "Content-Type": "application/json",
+    },
+  }
+);
+    console.log("Response received from ML model");
     
     
     // Check response status
-    if (!response.ok) {
+    if (!response || !response.data) {
         console.error(`ML Model returned status ${response.status}`);
         return res.status(response.status).json({
             success: false,
@@ -48,7 +61,7 @@ const Evaluation_response_handler = async (req, res) => {
     // Parse JSON response
     let outputJson;
     try {
-      outputJson = await response.json();
+      outputJson = response.data
     } catch (parseError) {
       console.error("Failed to parse ML model response:", parseError.message);
       return res.status(502).json({

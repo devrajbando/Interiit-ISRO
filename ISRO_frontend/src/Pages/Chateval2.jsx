@@ -165,16 +165,10 @@ const ChatEvalModeee = () => {
        ctx.closePath();
       ctx.save();
      
-      ctx.fill();
       ctx.strokeStyle = color;
       ctx.lineWidth = 3;
        ctx.stroke()
-     
-      
       ctx.restore();
-
-
-
     });
   };
 
