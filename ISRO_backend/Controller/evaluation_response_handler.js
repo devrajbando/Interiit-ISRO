@@ -71,7 +71,6 @@ const Evaluation_response_handler = async (req, res) => {
     return res.status(200).json({
       success: true,
       data: outputJson,
-      timestamp: new Date().toISOString(),
     });
 
   } catch (error) {
