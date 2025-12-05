@@ -23,9 +23,9 @@ const QueryTypeSelector = ({ selectedQueryType, onQueryTypeChange }) => {
     {
       category: 'Attributes',
       options: [
-        { id: 'Binary', name: 'binary', icon: '+' },
-        { id: 'Numeric', name: 'numeric', icon: '+' },
-        { id: 'Semantic', name: 'semantic', icon: '+' },
+        { id: 'Binary', name: 'binary', icon: 'B' },
+        { id: 'Numeric', name: 'numeric', icon: 'N' },
+        { id: 'Semantic', name: 'semantic', icon: 'S' },
       ]
     }
   ];
