@@ -8,7 +8,7 @@ import ChatEvalModeee from "./Chateval2.jsx";
 import { useTheme } from "../Context/theme/Themecontext";
 import { Zap, BarChart3, ChevronRight } from "lucide-react";
 export default function Chat() {
-  const [mode, setMode] = useState("interactives");
+  const [mode, setMode] = useState("interactive");
   const { darkMode } = useTheme();
   const [boundingBoxes, setBoundingBoxes] = useState([]);
   const [sidebarOpen, setSidebarOpen]=useState (true);

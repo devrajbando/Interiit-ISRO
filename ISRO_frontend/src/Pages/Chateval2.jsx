@@ -1,5 +1,16 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Upload, Play, Copy, Download, CheckCircle, XCircle, Clock, FileJson, Image, AlertCircle } from 'lucide-react';
+import React, { useState, useRef, useEffect } from "react";
+import {
+  Upload,
+  Play,
+  Copy,
+  Download,
+  CheckCircle,
+  XCircle,
+  Clock,
+  FileJson,
+  Image,
+  AlertCircle,
+} from "lucide-react";
 import { useTheme } from "../Context/theme/Themecontext";
 const ChatEvalModeee = () => {
   const [jsonInput, setJsonInput] = useState(`
@@ -34,13 +45,13 @@ const ChatEvalModeee = () => {
     }
 }
   `);
-    const [copied, setCopied] = useState(false);
-  const {darkMode} = useTheme();
-  const [jsonOutput, setJsonOutput] = useState('');
+  const [copied, setCopied] = useState(false);
+  const { darkMode } = useTheme();
+  const [jsonOutput, setJsonOutput] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [executionTime, setExecutionTime] = useState(null);
   const [status, setStatus] = useState(null);
-  const [imageUrl, setImageUrl] = useState('');
+  const [imageUrl, setImageUrl] = useState("");
   const [boundingBoxes, setBoundingBoxes] = useState([]);
   const canvasRef = useRef(null);
   const imageRef = useRef(null);
@@ -55,32 +66,34 @@ const ChatEvalModeee = () => {
       // Parse input JSON
       const input = JSON.parse(jsonInput);
       console.log(input);
-      const API=import.meta.env.VITE_BACKEND_ENDPOINT;
-      
+      const API = import.meta.env.VITE_BACKEND_ENDPOINT;
+
       setImageUrl(input.input_image.image_url);
-          const response = await fetch(`${API}/api/evaluation`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(input),
-        });
-        const outputJson=await response.json()
-        console.log(outputJson)
+      const response = await fetch(`${API}/api/evaluation`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(input),
+      });
+      const outputJson = await response.json();
+      console.log(outputJson);
       setJsonOutput(JSON.stringify(outputJson, null, 2));
       // Extract bounding boxes
-      const boxes = Object.values(outputJson.data.queries.grounding_query.response).map(box => ({
+      const boxes = Object.values(
+        outputJson.data.queries.grounding_query.response
+      ).map((box) => ({
         id: box["object-id"],
-        coords: box.obbox
+        coords: box.obbox,
       }));
       setBoundingBoxes(boxes);
 
       const endTime = Date.now();
       setExecutionTime(((endTime - startTime) / 1000).toFixed(2));
-      setStatus('success');
+      setStatus("success");
     } catch (error) {
-      setStatus('error');
-      console.log(error)
+      setStatus("error");
+      console.log(error);
       setJsonOutput(JSON.stringify({ error: error.message }, null, 2));
     } finally {
       setIsProcessing(false);
@@ -89,9 +102,14 @@ const ChatEvalModeee = () => {
 
   // Draw bounding boxes on canvas
   useEffect(() => {
-    if (imageUrl && boundingBoxes.length > 0 && canvasRef.current && imageRef.current) {
+    if (
+      imageUrl &&
+      boundingBoxes.length > 0 &&
+      canvasRef.current &&
+      imageRef.current
+    ) {
       const canvas = canvasRef.current;
-      const ctx = canvas.getContext('2d');
+      const ctx = canvas.getContext("2d");
       const img = imageRef.current;
 
       if (img.complete) {
@@ -103,44 +121,41 @@ const ChatEvalModeee = () => {
   const drawBoxes = (canvas, ctx, img) => {
     canvas.width = img.naturalWidth;
     canvas.height = img.naturalHeight;
-    
+
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
-    const colors = ['#f97316', '#3b82f6', '#10b981', '#ef4444', '#8b5cf6'];
-    
+
+    const colors = ["#f97316", "#3b82f6", "#10b981", "#ef4444", "#8b5cf6"];
+
     boundingBoxes.forEach((box, idx) => {
-      const [cx, cy, w, h, angle] = box.coords;
-      const x = cx * canvas.width;
-      const y = cy * canvas.height;
-      const width = w * canvas.width;
-      const height = h * canvas.height;
-      
-      ctx.save();
-      ctx.translate(x, y);
-      ctx.rotate((angle * Math.PI) / 180);
-      
+      const coords = box.coords; // length 8
+
       const color = colors[idx % colors.length];
       ctx.strokeStyle = color;
       ctx.lineWidth = 3;
-      ctx.strokeRect(-width / 2, -height / 2, width, height);
-      
-      // Label background
-    //   ctx.fillStyle = color;
-    //   ctx.fillRect(-width / 2, -height / 2 - 25, 80, 25);
-      
-    //   // Label text
-    //   ctx.fillStyle = 'white';
-    //   ctx.font = 'bold 14px sans-serif';
-    //   ctx.fillText(`${box.label} #${box.id}`, -width / 2 + 5, -height / 2 - 8);
-      
-      ctx.restore();
+
+      // Convert normalized → pixel
+      const pts = [];
+      for (let i = 0; i < 8; i += 2) {
+        const x = coords[i] * canvas.width;
+        const y = coords[i + 1] * canvas.height;
+        pts.push({ x, y });
+      }
+
+      // Draw polygon like Python
+      ctx.beginPath();
+      ctx.moveTo(pts[0].x, pts[0].y);
+      ctx.lineTo(pts[1].x, pts[1].y);
+      ctx.lineTo(pts[2].x, pts[2].y);
+      ctx.lineTo(pts[3].x, pts[3].y);
+      ctx.lineTo(pts[0].x, pts[0].y); // close polygon
+      ctx.stroke();
     });
   };
 
   const handleImageLoad = () => {
     if (canvasRef.current && imageRef.current && boundingBoxes.length > 0) {
       const canvas = canvasRef.current;
-      const ctx = canvas.getContext('2d');
+      const ctx = canvas.getContext("2d");
       const img = imageRef.current;
       drawBoxes(canvas, ctx, img);
     }
@@ -163,51 +178,73 @@ const ChatEvalModeee = () => {
   };
 
   const exportReport = () => {
-    const blob = new Blob([jsonOutput], { type: 'application/json' });
+    const blob = new Blob([jsonOutput], { type: "application/json" });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
     a.download = `evaluation_report_${Date.now()}.json`;
     a.click();
   };
 
   return (
-    <div className={`flex-1 p-6 ${darkMode ? 'bg-gray-900' : 'bg-gray-200'}`}>
+    <div className={`flex-1 p-6 ${darkMode ? "bg-gray-900" : "bg-gray-200"}`}>
       <div className="max-w-[1800px] mx-auto h-full">
         {/* Main Grid Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-full">
-          
           {/* LEFT PANEL - Input & Output JSON */}
           <div className="flex flex-col gap-6">
-            
             {/* INPUT JSON Section */}
-            <div className={`rounded-2xl border-2 ${
-              darkMode ? 'bg-gray-800 border-gray-700' : 'bg-gray-200 border-gray-200'
-            } shadow-xl overflow-visible flex-1`}>
-              <div className={`px-6 py-4 border-b flex items-center justify-between ${
-                darkMode ? 'border-gray-700 bg-gray-800/50' : 'border-gray-200 bg-gray-50'
-              }`}>
+            <div
+              className={`rounded-2xl border-2 ${
+                darkMode
+                  ? "bg-gray-800 border-gray-700"
+                  : "bg-gray-200 border-gray-200"
+              } shadow-xl overflow-visible flex-1`}
+            >
+              <div
+                className={`px-6 py-4 border-b flex items-center justify-between ${
+                  darkMode
+                    ? "border-gray-700 bg-gray-800/50"
+                    : "border-gray-200 bg-gray-50"
+                }`}
+              >
                 <div className="flex items-center gap-3">
-                  <div className={`p-2 rounded-lg ${
-                    darkMode ? 'bg-orange-600/20' : 'bg-orange-100'
-                  }`}>
-                    <FileJson className={`w-5 h-5 ${darkMode ? 'text-orange-400' : 'text-orange-600'}`} />
+                  <div
+                    className={`p-2 rounded-lg ${
+                      darkMode ? "bg-orange-600/20" : "bg-orange-100"
+                    }`}
+                  >
+                    <FileJson
+                      className={`w-5 h-5 ${
+                        darkMode ? "text-orange-400" : "text-orange-600"
+                      }`}
+                    />
                   </div>
                   <div>
-                    <h3 className={`font-bold text-lg ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                    <h3
+                      className={`font-bold text-lg ${
+                        darkMode ? "text-white" : "text-gray-900"
+                      }`}
+                    >
                       Input Request (JSON)
                     </h3>
-                    <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                    <p
+                      className={`text-sm ${
+                        darkMode ? "text-gray-400" : "text-gray-600"
+                      }`}
+                    >
                       Configure evaluation parameters
                     </p>
                   </div>
                 </div>
 
-                <label className={`flex items-center gap-2 px-4 py-2 rounded-lg cursor-pointer transition-all ${
-                  darkMode 
-                    ? 'bg-gray-700 hover:bg-gray-600 text-white' 
-                    : 'bg-gray-100 hover:bg-gray-200 text-gray-900'
-                }`}>
+                <label
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg cursor-pointer transition-all ${
+                    darkMode
+                      ? "bg-gray-700 hover:bg-gray-600 text-white"
+                      : "bg-gray-100 hover:bg-gray-200 text-gray-900"
+                  }`}
+                >
                   <Upload className="w-4 h-4" />
                   <span className="text-sm font-medium">Load JSON</span>
                   <input
@@ -224,26 +261,28 @@ const ChatEvalModeee = () => {
                   value={jsonInput}
                   onChange={(e) => setJsonInput(e.target.value)}
                   className={`w-full h-[400px] px-4 py-3 rounded-xl font-mono text-sm resize-none ${
-                    darkMode 
-                      ? 'bg-gray-900 text-gray-100 border-2 border-gray-700' 
-                      : 'bg-gray-50 text-gray-900 border-2 border-gray-200'
+                    darkMode
+                      ? "bg-gray-900 text-gray-100 border-2 border-gray-700"
+                      : "bg-gray-50 text-gray-900 border-2 border-gray-200"
                   } focus:outline-none focus:border-orange-500`}
                   spellCheck="false"
                 />
               </div>
 
-              <div className={`px-6 py-4 border-t ${
-                darkMode ? 'border-gray-700' : 'border-gray-200'
-              }`}>
+              <div
+                className={`px-6 py-4 border-t ${
+                  darkMode ? "border-gray-700" : "border-gray-200"
+                }`}
+              >
                 <button
                   onClick={executeEvaluation}
                   disabled={isProcessing}
                   className={`w-full flex items-center justify-center gap-2 px-6 py-3 font-semibold rounded-xl transition-all ${
                     isProcessing
-                      ? darkMode 
-                        ? 'bg-gray-700 text-gray-400 cursor-not-allowed'
-                        : 'bg-gray-200 text-gray-500 cursor-not-allowed'
-                      : 'px-4 py-2 bg-orange-600 text-white font-bold rounded shadow-lg hover:bg-orange-700 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 transition-transform transition-colors'
+                      ? darkMode
+                        ? "bg-gray-700 text-gray-400 cursor-not-allowed"
+                        : "bg-gray-200 text-gray-500 cursor-not-allowed"
+                      : "px-4 py-2 bg-orange-600 text-white font-bold rounded shadow-lg hover:bg-orange-700 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 transition-transform transition-colors"
                   }`}
                 >
                   {isProcessing ? (
@@ -262,39 +301,59 @@ const ChatEvalModeee = () => {
             </div>
 
             {/* OUTPUT JSON Section */}
-            <div className={`rounded-2xl border-2 ${
-              darkMode ? 'bg-gray-800 border-gray-700' : 'bg-gray-200 border-gray-200'
-            } shadow-xl overflow-hidden flex-1`}>
-              <div className={`px-6 py-4 border-b flex items-center justify-between ${
-                darkMode ? 'border-gray-700 bg-gray-800/50' : 'border-gray-200 bg-gray-50'
-              }`}>
+            <div
+              className={`rounded-2xl border-2 ${
+                darkMode
+                  ? "bg-gray-800 border-gray-700"
+                  : "bg-gray-200 border-gray-200"
+              } shadow-xl overflow-hidden flex-1`}
+            >
+              <div
+                className={`px-6 py-4 border-b flex items-center justify-between ${
+                  darkMode
+                    ? "border-gray-700 bg-gray-800/50"
+                    : "border-gray-200 bg-gray-50"
+                }`}
+              >
                 <div className="flex items-center gap-3">
-                  <div className={`p-2 rounded-lg ${
-                    darkMode ? 'bg-blue-600/20' : 'bg-blue-100'
-                  }`}>
-                    <FileJson className={`w-5 h-5 ${darkMode ? 'text-blue-400' : 'text-blue-600'}`} />
+                  <div
+                    className={`p-2 rounded-lg ${
+                      darkMode ? "bg-blue-600/20" : "bg-blue-100"
+                    }`}
+                  >
+                    <FileJson
+                      className={`w-5 h-5 ${
+                        darkMode ? "text-blue-400" : "text-blue-600"
+                      }`}
+                    />
                   </div>
                   <div>
-                    <h3 className={`font-bold text-lg ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                    <h3
+                      className={`font-bold text-lg ${
+                        darkMode ? "text-white" : "text-gray-900"
+                      }`}
+                    >
                       Output Response (JSON)
                     </h3>
                     <div className="flex items-center gap-4 mt-1">
-                      {status === 'success' && (
+                      {status === "success" && (
                         <span className="flex items-center gap-1 text-sm text-green-500">
                           <CheckCircle className="w-4 h-4" />
                           Success
                         </span>
                       )}
-                      {status === 'error' && (
+                      {status === "error" && (
                         <span className="flex items-center gap-1 text-sm text-red-500">
                           <XCircle className="w-4 h-4" />
                           Error
                         </span>
                       )}
                       {executionTime && (
-                        <span className={`flex items-center gap-1 text-sm ${
-                          darkMode ? 'text-gray-400' : 'text-gray-600'
-                        }`}>
+                        <span
+                          className={`flex items-center gap-1 text-sm ${
+                            darkMode ? "text-gray-400" : "text-gray-600"
+                          }`}
+                        >
                           <Clock className="w-4 h-4" />
                           {executionTime}s
                         </span>
@@ -308,28 +367,24 @@ const ChatEvalModeee = () => {
                     <button
                       onClick={copyToClipboard}
                       className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
-                        darkMode 
-                          ? 'bg-gray-700 hover:bg-gray-600 text-white' 
-                          : 'bg-gray-100 hover:bg-gray-200 text-gray-900'
+                        darkMode
+                          ? "bg-gray-700 hover:bg-gray-600 text-white"
+                          : "bg-gray-100 hover:bg-gray-200 text-gray-900"
                       }`}
                     >
                       <Copy className="w-4 h-4" />
-                      {!copied?(
-
-                          <span className="text-sm font-medium">Copy</span>
-                      ):
-                      (
-
-                          <span className="text-sm font-medium">Copied</span>
-                      )
-                    }
+                      {!copied ? (
+                        <span className="text-sm font-medium">Copy</span>
+                      ) : (
+                        <span className="text-sm font-medium">Copied</span>
+                      )}
                     </button>
                     <button
                       onClick={exportReport}
                       className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
-                        darkMode 
-                          ? 'bg-gray-700 hover:bg-gray-600 text-white' 
-                          : 'bg-gray-100 hover:bg-gray-200 text-gray-900'
+                        darkMode
+                          ? "bg-gray-700 hover:bg-gray-600 text-white"
+                          : "bg-gray-100 hover:bg-gray-200 text-gray-900"
                       }`}
                     >
                       <Download className="w-4 h-4" />
@@ -341,22 +396,32 @@ const ChatEvalModeee = () => {
 
               <div className="p-4">
                 {jsonOutput ? (
-                  <pre className={`w-full h-[400px] px-4 py-3 rounded-xl font-mono text-sm overflow-auto ${
-                    darkMode 
-                      ? 'bg-gray-900 text-gray-100 border-2 border-gray-700' 
-                      : 'bg-gray-50 text-gray-900 border-2 border-gray-200'
-                  }`}>
+                  <pre
+                    className={`w-full h-[400px] px-4 py-3 rounded-xl font-mono text-sm overflow-auto ${
+                      darkMode
+                        ? "bg-gray-900 text-gray-100 border-2 border-gray-700"
+                        : "bg-gray-50 text-gray-900 border-2 border-gray-200"
+                    }`}
+                  >
                     {jsonOutput}
                   </pre>
                 ) : (
-                  <div className={`w-full h-[400px] flex items-center justify-center rounded-xl border-2 border-dashed ${
-                    darkMode ? 'border-gray-700' : 'border-gray-300'
-                  }`}>
+                  <div
+                    className={`w-full h-[400px] flex items-center justify-center rounded-xl border-2 border-dashed ${
+                      darkMode ? "border-gray-700" : "border-gray-300"
+                    }`}
+                  >
                     <div className="text-center">
-                      <AlertCircle className={`w-12 h-12 mx-auto mb-3 ${
-                        darkMode ? 'text-gray-600' : 'text-gray-400'
-                      }`} />
-                      <p className={`text-sm ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>
+                      <AlertCircle
+                        className={`w-12 h-12 mx-auto mb-3 ${
+                          darkMode ? "text-gray-600" : "text-gray-400"
+                        }`}
+                      />
+                      <p
+                        className={`text-sm ${
+                          darkMode ? "text-gray-500" : "text-gray-500"
+                        }`}
+                      >
                         Output will appear here after execution
                       </p>
                     </div>
@@ -367,23 +432,45 @@ const ChatEvalModeee = () => {
           </div>
 
           {/* RIGHT PANEL - Visual Output */}
-          <div className={`rounded-2xl border-2 ${
-            darkMode ? 'bg-gray-800 border-gray-700' : 'bg-gray-200 border-gray-200'
-          } shadow-xl overflow-hidden flex flex-col`}>
-            <div className={`px-6 py-4 border-b ${
-              darkMode ? 'border-gray-700 bg-gray-800/50' : 'border-gray-200 bg-gray-50'
-            }`}>
+          <div
+            className={`rounded-2xl border-2 ${
+              darkMode
+                ? "bg-gray-800 border-gray-700"
+                : "bg-gray-200 border-gray-200"
+            } shadow-xl overflow-hidden flex flex-col`}
+          >
+            <div
+              className={`px-6 py-4 border-b ${
+                darkMode
+                  ? "border-gray-700 bg-gray-800/50"
+                  : "border-gray-200 bg-gray-50"
+              }`}
+            >
               <div className="flex items-center gap-3">
-                <div className={`p-2 rounded-lg ${
-                  darkMode ? 'bg-blue-600/20' : 'bg-blue-100'
-                }`}>
-                  <Image className={`w-5 h-5 ${darkMode ? 'text-blue-400' : 'text-blue-600'}`} />
+                <div
+                  className={`p-2 rounded-lg ${
+                    darkMode ? "bg-blue-600/20" : "bg-blue-100"
+                  }`}
+                >
+                  <Image
+                    className={`w-5 h-5 ${
+                      darkMode ? "text-blue-400" : "text-blue-600"
+                    }`}
+                  />
                 </div>
                 <div>
-                  <h3 className={`font-bold text-lg ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                  <h3
+                    className={`font-bold text-lg ${
+                      darkMode ? "text-white" : "text-gray-900"
+                    }`}
+                  >
                     Visual Output
                   </h3>
-                  <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                  <p
+                    className={`text-sm ${
+                      darkMode ? "text-gray-400" : "text-gray-600"
+                    }`}
+                  >
                     Image with annotated bounding boxes
                   </p>
                 </div>
@@ -392,9 +479,11 @@ const ChatEvalModeee = () => {
 
             <div className="flex-1 p-6 overflow-auto">
               {imageUrl || boundingBoxes.length > 0 ? (
-                <div className={`relative rounded-xl overflow-hidden border-2 ${
-                  darkMode ? 'border-gray-700' : 'border-gray-200'
-                }`}>
+                <div
+                  className={`relative rounded-xl overflow-hidden border-2 ${
+                    darkMode ? "border-gray-700" : "border-gray-200"
+                  }`}
+                >
                   <img
                     ref={imageRef}
                     src={imageUrl}
@@ -408,17 +497,31 @@ const ChatEvalModeee = () => {
                   />
                 </div>
               ) : (
-                <div className={`w-full h-full flex items-center justify-center rounded-xl border-2 border-dashed ${
-                  darkMode ? 'border-gray-700 bg-gray-900/50' : 'border-gray-300 bg-gray-50'
-                }`}>
+                <div
+                  className={`w-full h-full flex items-center justify-center rounded-xl border-2 border-dashed ${
+                    darkMode
+                      ? "border-gray-700 bg-gray-900/50"
+                      : "border-gray-300 bg-gray-50"
+                  }`}
+                >
                   <div className="text-center">
-                    <Image className={`w-16 h-16 mx-auto mb-4 ${
-                      darkMode ? 'text-gray-600' : 'text-gray-400'
-                    }`} />
-                    <p className={`text-lg font-semibold ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                    <Image
+                      className={`w-16 h-16 mx-auto mb-4 ${
+                        darkMode ? "text-gray-600" : "text-gray-400"
+                      }`}
+                    />
+                    <p
+                      className={`text-lg font-semibold ${
+                        darkMode ? "text-gray-400" : "text-gray-600"
+                      }`}
+                    >
                       No Image Loaded
                     </p>
-                    <p className={`text-sm mt-2 ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>
+                    <p
+                      className={`text-sm mt-2 ${
+                        darkMode ? "text-gray-500" : "text-gray-500"
+                      }`}
+                    >
                       Execute evaluation to see annotated results
                     </p>
                   </div>
@@ -427,24 +530,38 @@ const ChatEvalModeee = () => {
             </div>
 
             {boundingBoxes.length > 0 && (
-              <div className={`px-6 py-4 border-t ${
-                darkMode ? 'border-gray-700 bg-gray-800/50' : 'border-gray-200 bg-gray-50'
-              }`}>
-                <h4 className={`text-sm font-semibold mb-3 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+              <div
+                className={`px-6 py-4 border-t ${
+                  darkMode
+                    ? "border-gray-700 bg-gray-800/50"
+                    : "border-gray-200 bg-gray-50"
+                }`}
+              >
+                <h4
+                  className={`text-sm font-semibold mb-3 ${
+                    darkMode ? "text-white" : "text-gray-900"
+                  }`}
+                >
                   Detected Objects ({boundingBoxes.length})
                 </h4>
                 <div className="flex flex-wrap gap-2">
                   {boundingBoxes.map((box, idx) => {
-                    const colors = ['#f97316', '#3b82f6', '#10b981', '#ef4444', '#8b5cf6'];
+                    const colors = [
+                      "#f97316",
+                      "#3b82f6",
+                      "#10b981",
+                      "#ef4444",
+                      "#8b5cf6",
+                    ];
                     const color = colors[idx % colors.length];
                     return (
                       <span
                         key={idx}
                         className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium"
-                        style={{ 
+                        style={{
                           backgroundColor: `${color}20`,
                           border: `2px solid ${color}`,
-                          color: darkMode ? '#fff' : '#000'
+                          color: darkMode ? "#fff" : "#000",
                         }}
                       >
                         <div
