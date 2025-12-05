@@ -24,29 +24,29 @@ Advanced AI-powered satellite image analysis platform with interactive chat and 
 
 ---
 
-## 🎯 Project Overview
+## Project Overview
 
 GeoNLI is a comprehensive satellite image analysis platform that leverages machine learning to provide intelligent insights from satellite imagery. The platform supports two main modes:
 
-### **Interactive Mode**
+### Interactive Mode
 Real-time conversational interface for satellite image queries with instant AI responses and visual annotations.
 
-### **Evaluation Mode**
+### Evaluation Mode
 Advanced JSON-based evaluation system for testing model performance with complex multi-query payloads.
 
-### **Key Features**
-- 🌍 Satellite image upload and processing
-- 💬 Interactive chat-based queries
-- 📊 Real-time bounding box detection and visualization
-- 🔍 Multiple query types (caption, grounding, attribute)
-- 🎨 Dark/Light theme support
-- 📱 Fully responsive design
-- ⚡ Real-time session management
-- 📈 Evaluation metrics and reporting
+### Key Features
+- Satellite image upload and processing
+- Interactive chat-based queries
+- Real-time bounding box detection and visualization
+- Multiple query types (caption, grounding, attribute)
+- Dark/Light theme support
+- Fully responsive design
+- Real-time session management
+- Evaluation metrics and reporting
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 ### High-Level System Architecture
 
@@ -139,41 +139,41 @@ USER INPUT
 
 ---
 
-## 💻 Technology Stack
+## Technology Stack
 
 ### Frontend
 | Technology | Purpose |
 |-----------|---------|
-| **React 18** | UI Framework |
-| **Vite** | Build tool & dev server |
-| **Tailwind CSS** | Styling |
-| **Lucide React** | Icons |
-| **UUID** | Session ID generation |
-| **Axios** | HTTP client |
-| **React Context API** | State management |
-| **React Resizable Panels** | Responsive panel layout |
+| React 18 | UI Framework |
+| Vite | Build tool & dev server |
+| Tailwind CSS | Styling |
+| Lucide React | Icons |
+| UUID | Session ID generation |
+| Axios | HTTP client |
+| React Context API | State management |
+| React Resizable Panels | Responsive panel layout |
 
 ### Backend
 | Technology | Purpose |
 |-----------|---------|
-| **Node.js** | Runtime |
-| **Express.js** | Web framework |
-| **Axios** | HTTP client for ML calls |
-| **CORS** | Cross-origin handling |
-| **dotenv** | Environment variables |
-| **Cookie Parser** | Cookie handling |
+| Node.js | Runtime |
+| Express.js | Web framework |
+| Axios | HTTP client for ML calls |
+| CORS | Cross-origin handling |
+| dotenv | Environment variables |
+| Cookie Parser | Cookie handling |
 
 ### Development & Deployment
 | Tool | Purpose |
 |------|---------|
-| **Git** | Version control |
-| **Vercel** | Frontend deployment |
-| **Docker** | Backend containerization |
-| **Postman** | API testing |
+| Git | Version control |
+| Vercel | Frontend deployment |
+| Docker | Backend containerization |
+| Postman | API testing |
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 Interiit-ISRO/
@@ -387,7 +387,7 @@ Interiit-ISRO/
 
 ---
 
-## 🔌 Backend Documentation
+## Backend Documentation
 
 ### Overview
 The backend is a Node.js/Express server that acts as a middleware between the frontend and ML model endpoint.
@@ -572,7 +572,7 @@ NODE_ENV=development
 FRONTEND_URL=http://localhost:5173
 
 # ML Model
-ML_MODEL_ENDPOINT=https://your-ml-api.com/infer
+ML_MODEL_ENDPOINT="http://194.68.245.32:22100/geoNLI/eval
 ```
 
 ### Error Handling
@@ -587,7 +587,7 @@ ML_MODEL_ENDPOINT=https://your-ml-api.com/infer
 
 ---
 
-## 🎨 Frontend Documentation
+## Frontend Documentation
 
 ### Overview
 React/Vite frontend application providing interactive UI for satellite image analysis.
@@ -889,7 +889,7 @@ Frontend Structure:
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 - Node.js v16+ (frontend & backend)
@@ -949,7 +949,7 @@ npm run dev
 
 ---
 
-## 📊 Data Flow
+## Data Flow
 
 ### Interactive Mode Flow
 
@@ -1038,7 +1038,7 @@ const pixelY1 = y1 * canvasHeight;
 
 ---
 
-## 🌐 API Integration
+## API Integration
 
 ### ML Model Endpoint Requirements
 
@@ -1099,7 +1099,7 @@ The ML model endpoint must:
 
 ---
 
-## 🐳 Deployment
+## Deployment
 
 ### Frontend Deployment (Vercel)
 
@@ -1158,7 +1158,7 @@ ML_MODEL_ENDPOINT=https://your-ml-endpoint.com
 
 ---
 
-## 🔧 Troubleshooting
+## Troubleshooting
 
 ### Common Issues
 
