@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { Interactive_response_handler } from "../Controller/Interactive_response_handler.js"; // agar kahin aur hai
+import { Interactive_response_handler } from '../controllers/Interactive_response_handler.js' // agar kahin aur hai
 
 const interactive_router = Router();
 

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { Evaluation_response_handler } from "../Controller/evaluation_response_handler.js"; // agar kahin aur hai
+import { Evaluation_response_handler } from "../controllers/evaluation_response_handler.js"; // agar kahin aur hai
 
 const evaluation_router = Router();
 
