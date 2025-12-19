@@ -8,9 +8,13 @@ import Footer from "./Components/Footer.jsx";
 import Themeprovider from "./Context/theme/Themeprovider.jsx";
 import StarField from "./Components/ui/StarField";
 import ErrorPage from "../src/Components/Error.jsx"; 
+import { AuthProvider } from "./Context/auth/AuthContext";
+import AuthPage from "./Pages/AuthPage";
+import ProtectedRoute from "./Components/ProtectedRoute.jsx";
 
 export default function App() {
   return (
+    <AuthProvider>
     <div className="w-screen h-screen bg-white dark:bg-[#0d0d0f] transition-colors duration-300 overflow-x-hidden scrollbar-hide">
       <Themeprovider>
         <div>
@@ -19,9 +23,13 @@ export default function App() {
             <Navbar />
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/chat" element={<Chat />} />
-              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/chat" element={<ProtectedRoute><Chat/></ProtectedRoute>} />
+              <Route path="/dashboard" element={<ProtectedRoute><Dashboard/></ProtectedRoute>} />
+              {/* <Route path="/chat" element={<Chat />} />
+              <Route path="/dashboard" element={<Dashboard />} /> */}
               <Route path="*" element={<ErrorPage />} />
+              <Route path="/auth" element={<AuthPage />} />
+
             </Routes>
 
             <Footer />
@@ -29,5 +37,6 @@ export default function App() {
         </div>
       </Themeprovider>
     </div>
+    </AuthProvider>
   );
 }

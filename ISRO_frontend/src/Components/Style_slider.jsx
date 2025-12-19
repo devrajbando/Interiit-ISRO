@@ -76,7 +76,7 @@ export default function RunpodStyleSlider() {
       {/* LEFT TEXT WITH PROGRESS BAR */}
 <div className="w-1/2 pr-10">
 
-  {/* 🔥 Card slide animation */}
+  {/* Card slide animation */}
   <AnimatePresence mode="wait">
     <motion.div
       key={index}
@@ -100,8 +100,8 @@ export default function RunpodStyleSlider() {
               group p-8 rounded-3xl transition-all duration-300
 
               ${darkMode
-                ? "bg-gradient-to-br from-gray-800 to-gray-900"
-                : "bg-gradient-to-br from-white to-gray-50"
+                ? "bg-linear-to-br from-gray-800 to-gray-900"
+                : "bg-linear-to-br from-white to-gray-50"
               }
 
               border-2 ${darkMode ? "border-gray-700" : "border-gray-200"}
@@ -123,30 +123,35 @@ export default function RunpodStyleSlider() {
               shadow-xl hover:shadow-2xl
             `}
           >
+            <div className="flex gap-6 items-center">
 
             {/* Icon */}
             <div
               className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-6 shadow-lg group-hover:shadow-2xl transition-shadow
                 ${
                   index === 0
-                    ? darkMode ? "bg-blue-600" : "bg-blue-500"
-                    : index === 1
-                    ? darkMode ? "bg-purple-600" : "bg-purple-500"
+                  ? darkMode ? "bg-blue-600" : "bg-blue-500"
+                  : index === 1
+                  ? darkMode ? "bg-purple-600" : "bg-purple-500"
                     : darkMode ? "bg-pink-600" : "bg-pink-500"
-                }
-              `}
+                  }
+                  `}
             >
               {f.icon}
+              
             </div>
 
             {/* Highlight heading */}
             <div className="text-2xl font-bold mb-4">
-              <HeroHighlightDemo
+              {/* <HeroHighlightDemo
                 key={index}
                 text={f.texts}
                 hightext={f.hitext}
-              />
+                /> */}
+              {f.texts}
+             {f.hitext}
             </div>
+                </div>
 
             {/* Description */}
             <p
@@ -167,7 +172,7 @@ export default function RunpodStyleSlider() {
   <div className="space-y-2 my-4">
     <div className="w-full h-1 bg-gray-800 rounded-full overflow-hidden">
       <div
-        className="h-full bg-gradient-to-r from-blue-500 to-blue-400"
+        className="h-full bg-linear-to-r from-blue-500 to-blue-400"
         style={{ width: `${progress}%` }}
       />
     </div>

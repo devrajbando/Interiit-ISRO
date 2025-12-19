@@ -69,7 +69,7 @@ export default function ChatLeft({ sidebarOpen, setSidebarOpen }) {
   return (
     <>
       {sidebarOpen ? (
-        // ✅ EXPANDED SIDEBAR
+        //  EXPANDED SIDEBAR
         <div
           className={`h-full w-full flex flex-col transition-all duration-300 ${
             darkMode ? "bg-gray-900 border-gray-800" : "bg-white border-gray-200"
@@ -248,7 +248,7 @@ export default function ChatLeft({ sidebarOpen, setSidebarOpen }) {
           </div>
         </div>
       ) : (
-        // ✅ COLLAPSED SIDEBAR
+        //  COLLAPSED SIDEBAR
         <div className="h-full flex flex-col gap-2 sm:gap-3 items-center justify-start pt-2 sm:pt-3 px-1">
 
           {/* Expand Button */}
@@ -272,7 +272,7 @@ export default function ChatLeft({ sidebarOpen, setSidebarOpen }) {
         </div>
       )}
 
-      {/* ✅ RESPONSIVE MODAL */}
+      {/*  RESPONSIVE MODAL */}
       {open && (
         <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
           <div

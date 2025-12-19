@@ -7,17 +7,20 @@ import {
   Satellite,
   ExternalLink
 } from "lucide-react";
+import { v4 as uuid } from "uuid";
 import { AlertDialog, AlertDialogAction, AlertDialogDescription, AlertDialogCancel, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger, } from "../Components/ui/alert-dialog.jsx"
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "../Context/theme/Themecontext";
 import { sessioncontext } from "../Context/session/sessioncontext.jsx";
-
+import { useAuthContext } from "../hooks/useAuthContext.jsx";
 const Dashboard = () => {
   const navigate = useNavigate();
   const { sessions, setSessions, activeSessionId, setActiveSessionId } =
     useContext(sessioncontext);
-
+const { user } = useAuthContext();
   const { darkMode } = useTheme();
+  const [open, setOpen] = useState(false);
+  const [chatName, setChatName] = useState("");
 
   // State for search and filter
   const [searchQuery, setSearchQuery] = useState("");
@@ -199,6 +202,37 @@ const Dashboard = () => {
     </div>
   );
 
+function createNewSession(chatName) {
+  return {
+    sessionId: uuid(),
+    name: chatName,
+    createdAt: Date.now(),
+    publicImageURL: null,
+    draftText: "",
+    aiLoading: false,
+    messages: [],
+    unreadCount: 0,
+    updatedAt: Date.now(),
+  };
+}
+    const createNewChat = () => {
+    if (!chatName.trim()) {
+      alert("Please give chat name");
+      return;
+    }
+
+    const newSession = createNewSession(chatName);
+    const updatedSessions = [...sessions, newSession];
+
+    setSessions(updatedSessions);
+    setActiveSessionId(newSession);
+    localStorage.setItem("GeoNLI_Sessions", JSON.stringify(updatedSessions));
+
+    setOpen(false);
+    setChatName("");
+    navigate("/chat");
+  };
+
   return (
     <div
       className={`relative min-h-screen transition-colors duration-500 ${
@@ -227,8 +261,9 @@ const Dashboard = () => {
 
           <button
             onClick={() => {
-              setActiveSessionId(null);
-              navigate("/chat");
+              // setActiveSessionId(null);
+              // navigate("/chat");
+              setOpen(true);
             }}
             className={`px-4 py-3 cursor-pointer text-sm transition-all rounded-xl shadow-md font-semibold flex items-center justify-center gap-2 hover:scale-105 active:scale-95 w-full sm:w-auto ${
               darkMode
@@ -236,8 +271,8 @@ const Dashboard = () => {
                 : "bg-orange-100 text-orange-700 hover:bg-orange-200 border border-orange-200"
             }`}
           >
-            <Brain className="w-5 h-5" />
-            <span>Analyse</span>
+            <Plus className="w-5 h-5" />
+            <span>New</span>
           </button>
         </div>
 
@@ -496,6 +531,91 @@ const Dashboard = () => {
           </div>
         )}
       </div>
+
+      {/* New Chat Popup */}
+      {open && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
+          <div
+            className="absolute inset-0 bg-black/60 backdrop-blur-md"
+            onClick={() => {
+              setOpen(false);
+              setChatName("");
+            }}
+          />
+          <div
+            className={`
+              relative z-50 rounded-xl sm:rounded-2xl shadow-2xl p-4 sm:p-8 
+              w-full sm:w-[90%] max-w-sm border backdrop-blur-xl
+              ${
+                darkMode
+                  ? "bg-gray-900/95 border-gray-700 text-white"
+                  : "bg-white/95 border-gray-300 text-gray-900"
+              }
+            `}
+          >
+            <h2
+              className={`text-xl sm:text-2xl font-bold mb-4 sm:mb-6 ${
+                darkMode
+                  ? "text-white"
+                  : "bg-linear-to-r from-orange-500 to-blue-500 bg-clip-text text-transparent"
+              }`}
+            >
+              Create New Chat
+            </h2>
+
+            <input
+              type="text"
+              placeholder="Enter chat name..."
+              value={chatName}
+              onChange={(e) => setChatName(e.target.value)}
+              onKeyPress={(e) => e.key === "Enter" && createNewChat()}
+              className={`
+                w-full p-2 sm:p-3 rounded-lg border-2 outline-none transition-all text-sm sm:text-base
+                ${
+                  darkMode
+                    ? "bg-gray-800 border-gray-700 text-white placeholder-gray-500 focus:border-orange-500"
+                    : "bg-gray-50 border-gray-300 text-gray-900 placeholder-gray-400 focus:border-orange-500"
+                }
+                focus:shadow-lg
+              `}
+              autoFocus
+            />
+
+            <div className="flex flex-col-reverse sm:flex-row justify-end gap-2 sm:gap-3 mt-4 sm:mt-6">
+              <button
+                type="button"
+                onClick={() => {
+                  setOpen(false);
+                  setChatName("");
+                }}
+                className={`
+                  px-4 sm:px-5 py-2 rounded-lg border-2 transition-all font-medium text-sm sm:text-base
+                  ${
+                    darkMode
+                      ? "border-gray-600 text-gray-300 hover:bg-gray-800 hover:border-gray-500"
+                      : "border-gray-400 text-gray-700 hover:bg-gray-100 hover:border-gray-500"
+                  }
+                `}
+              >
+                Cancel
+              </button>
+
+              <button
+                type="button"
+                onClick={createNewChat}
+                disabled={!chatName.trim()}
+                className={`px-4 sm:px-5 py-2 rounded-lg text-white font-medium transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 active:scale-95 text-sm sm:text-base ${
+                  darkMode
+                    ? "bg-orange-600 hover:bg-orange-700"
+                    : "bg-linear-to-r from-orange-500 to-blue-500 hover:from-orange-600 hover:to-blue-600"
+                }`}
+              >
+                Create
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

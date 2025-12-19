@@ -79,7 +79,7 @@ export default function Chat() {
             </div>
 
             {/* Right: Mode Toggle */}
-            <button
+            {/* <button
               onClick={() =>
                 setMode(mode === "interactive" ? "evaluation" : "interactive")
               }
@@ -97,7 +97,7 @@ export default function Chat() {
                 {mode === "interactive" ? "Evaluation" : "Interactive"} Mode
               </span>
               <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-            </button>
+            </button> */}
           </div>
         </div>
       </div>

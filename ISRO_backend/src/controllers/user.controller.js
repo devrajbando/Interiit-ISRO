@@ -3,19 +3,25 @@ import {ApiError} from '../utils/ApiError.js'
 import {User} from '../models/user.model.js'
 import bcrypt from 'bcrypt'
 import { ApiResponse } from "../utils/ApiResponse.js";
+import sendOTP  from "../utils/Mailer.js";
 import jwt from 'jsonwebtoken'
 import { mongoose } from "mongoose";
+import { OAuth2Client } from "google-auth-library";
+
+export const googleClient = new OAuth2Client(
+  process.env.GOOGLE_CLIENT_ID
+);
 
 
 const generateAccessAndRefreshToken=async(userId)=>
     {
         try {
             const user=await User.findById(userId)
-            const accessToken=user.generateAcessToken()
+            const accessToken=user.generateAccessToken()
             const refreshToken=user.generateRefreshToken()
             user.refreshToken=refreshToken
             await user.save({validateBeforeSave:false})
-            console.log("reached user.controller.js ",accessToken)
+            // console.log("reached user.controller.js ",accessToken)
             return {accessToken,refreshToken}
         } catch (error) {
             console.log(error.message)
@@ -136,20 +142,19 @@ const LoginUser=asyncHandler(async(req,res)=>{
 
 const LogoutUser=asyncHandler(async(req,res)=>{
 
-    const {password}=req.body
-    const user=await User.findById(req.user._id)
+    // const {password}=req.body
+   
 
     // const isPasswordValid=await user.isPasswordCorrect(password)
     
-    const isPasswordValid=await bcrypt.compare(
-        password,
-		user.password)
+    // const isPasswordValid=await bcrypt.compare(
+    //     password,
+	// 	user.password)
         // console.log(isPasswordValid)
-        console.log(password)
-        console.log(user.password)
+       
     // const isPasswordValid=password === user.password ? true:false
-        if(!isPasswordValid)
-            throw new ApiError(401,"INCORRECT password")
+        // if(!isPasswordValid)
+        //     throw new ApiError(401,"INCORRECT password")
         
         
     await User.findByIdAndUpdate (req.user._id,{
@@ -166,6 +171,7 @@ const LogoutUser=asyncHandler(async(req,res)=>{
             secure:false
 //turn to true during production       
  }
+ console.log("reached logout")
 
         return res
         .status(200)
@@ -173,8 +179,6 @@ const LogoutUser=asyncHandler(async(req,res)=>{
         .clearCookie("refreshToken",options)
         .json(new ApiResponse(200,{},"User logged Out"))
     })
-
-
 
 const CurrentUser=asyncHandler(async(req,res)=>{
     const user=await User.findById(req.user._id)
@@ -186,13 +190,126 @@ const CurrentUser=asyncHandler(async(req,res)=>{
     
 })
 
+const sendOtp=asyncHandler(async(req,res)=>{
+     try {
+    const { email } = req.body;
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const otpExpiry = new Date(Date.now() + 10 * 60 * 1000);
+
+    let user = await User.findOne({ email });
+    if (!user) {
+      user = new User({ email, otp, otpExpiry });
+    } else {
+      user.otp = otp;
+      user.otpExpiry = otpExpiry;
+    }
+    await user.save();
+
+    const sent = await sendOTP(email, otp);
+    if (!sent) return res.status(500).json({ message: 'Failed to send OTP' });
+
+    res.json({ message: 'OTP sent successfully' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+})
+
+const verifyOTP=asyncHandler(async(req,res)=>{
+    try {
+    const { email, otp, password } = req.body;
+
+    const user = await User.findOne({ email });
+    if (!user) return res.status(400).json({ message: 'User not found' });
+
+    if (user.otp !== otp) return res.status(400).json({ message: 'Invalid OTP' });
+    if (new Date() > user.otpExpiry) return res.status(400).json({ message: 'OTP expired' });
+
+    user.password = password;
+    user.isVerified = true;
+    user.otp = undefined;
+    user.otpExpiry = undefined;
+    await user.save();
+
+    const token = generateToken(user._id);
+    res.json({ token, user: { id: user._id, email: user.email } });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+})
+
+const googleLogin=asyncHandler(async(req,res)=>{
+   
+    const { credential } = req.body;
+    console.log("reached google login controller")
+    
+    const ticket = await googleClient.verifyIdToken({
+      idToken: credential,
+      audience: process.env.GOOGLE_CLIENT_ID
+    });
+    const payload = ticket.getPayload();
+ 
+    const { email, sub: googleId, name } = payload;
+    console.log("Google Payload:", payload);
+    
+    let user = await User.findOne({ $or: [{ email }, { googleId }] });
+    
+    if (!user) {
+      // User doesn't exist - create new user
+      user = await User.create({
+        name,
+        email,
+        googleId,
+        isVerified: true
+      });
+     
+    } else {
+      // User already exists - update googleId if not set
+      if (!user.googleId) {
+        user.googleId = googleId;
+        await user.save();
+      }
+      
+    }
+    
+    const loggedInUser = await User.findById(user._id).select("-password -refreshToken");
+    
+    if (!loggedInUser) {
+      throw new ApiError(500, "something went wrong on our side");
+    }
+    
+    const { accessToken, refreshToken } = await generateAccessAndRefreshToken(user._id);
+    
+    const options = {
+      httpOnly: true,
+      secure: false,
+      sameSite: "Lax",
+    };
+    
+    console.log("reached final point google login");
+    
+    return res   
+      .status(200)
+      .cookie("accessToken", accessToken, options)
+      .cookie("refreshToken", refreshToken, options)
+      .json(new ApiResponse(
+        200,
+        {
+          user: loggedInUser,
+          accessToken,
+          refreshToken
+        },
+        "User Logged In Successfully"
+      ));
+})
 
 export {generateAccessAndRefreshToken,
-    // verifyEmail,
     registerUser,
     LoginUser,
     LogoutUser
     ,checkAuth,
     CurrentUser,
+    sendOtp,
+    verifyOTP,
+    googleLogin
     
 }
